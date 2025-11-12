@@ -6,9 +6,12 @@ const AdminLogin = () => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
+  // ✅ Use localhost 4000 for development
+  const BACKEND_URL = 'http://localhost:4000';
+
   const handleLogin = async () => {
     try {
-      const res = await fetch('http://localhost:4000/adminlogin', {
+      const res = await fetch(`${BACKEND_URL}/adminlogin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),

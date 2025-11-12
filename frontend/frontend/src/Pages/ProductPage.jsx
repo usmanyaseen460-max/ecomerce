@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ShopContext } from "../Components/Context/ShopContext";
 import "./ProductPage.css";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
-import RelatedProducts from "../Components/RelatedProducts/RelatedProducts"; // ✅ Added import
+import RelatedProducts from "../Components/RelatedProducts/RelatedProducts";
 
 const ProductPage = () => {
   const { id } = useParams();
@@ -14,7 +14,7 @@ const ProductPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [selectedVariants, setSelectedVariants] = useState([]); // ✅ multiple selection
+  const [selectedVariants, setSelectedVariants] = useState([]);
 
   useEffect(() => {
     const found = all_products.find((p) => p.id === Number(id));
@@ -75,7 +75,6 @@ const ProductPage = () => {
     <>
       <div className="luxury-container">
         <div className="luxury-product">
-          {/* ===== Image Section ===== */}
           <div className="image-section">
             <div className="main-image-box">
               <button className="arrow left-arrow" onClick={handlePrevImage}>
@@ -92,7 +91,6 @@ const ProductPage = () => {
               </button>
             </div>
 
-            {/* ===== Color Selector (multi-select) ===== */}
             <div className="color-names-wrapper">
               {product.variants.map((v, idx) => {
                 const selected = selectedVariants.some((sv) => sv.color === v.color);
@@ -102,12 +100,7 @@ const ProductPage = () => {
                     className={`color-name-box ${selected ? "selected" : ""}`}
                     onClick={() => handleColorSelect(v)}
                   >
-                    <input
-                      type="checkbox"
-                      checked={selected}
-                      readOnly
-                      style={{ marginRight: "8px" }}
-                    />
+                    <input type="checkbox" checked={selected} readOnly />
                     {v.color}
                   </div>
                 );
@@ -115,7 +108,6 @@ const ProductPage = () => {
             </div>
           </div>
 
-          {/* ===== Details Section ===== */}
           <div className="details-section">
             <h1 className="product-title">{product.name}</h1>
             <p className="product-price">Rs. {product.price}</p>
@@ -137,10 +129,7 @@ const ProductPage = () => {
             </div>
 
             <div className="button-group">
-              <button
-                className="cart-button"
-                onClick={() => addToCart(product.id, quantity)}
-              >
+              <button className="cart-button" onClick={() => addToCart(product.id, quantity)}>
                 Add to Cart
               </button>
               <button className="buy-button" onClick={handleBuyNow}>
@@ -150,7 +139,6 @@ const ProductPage = () => {
           </div>
         </div>
 
-        {/* ===== Lightbox ===== */}
         {isLightboxOpen && (
           <div className="lightbox">
             <button className="arrow left-arrow" onClick={handlePrevImage}>
@@ -165,18 +153,15 @@ const ProductPage = () => {
             <button className="arrow right-arrow" onClick={handleNextImage}>
               &#8594;
             </button>
-            <span
-              className="close-lightbox"
-              onClick={() => setIsLightboxOpen(false)}
-            >
+            <span className="close-lightbox" onClick={() => setIsLightboxOpen(false)}>
               ✕
             </span>
           </div>
         )}
       </div>
 
-      {/* ✅ Related Products Section */}
-      <RelatedProducts productId={product._id} />
+      {/* ✅ Related Products */}
+      <RelatedProducts productId={product.id} />
     </>
   );
 };

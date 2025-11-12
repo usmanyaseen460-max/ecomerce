@@ -8,9 +8,17 @@ const RelatedProducts = ({ productId }) => {
 
   useEffect(() => {
     if (!productId) return;
+
     fetch(`http://localhost:4000/relatedproducts/${productId}`)
       .then((res) => res.json())
-      .then((data) => setRelatedProducts(data))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setRelatedProducts(data);
+        } else {
+          setRelatedProducts([]);
+          console.error("Related products returned invalid data:", data);
+        }
+      })
       .catch((err) => console.error("Related products fetch error:", err));
   }, [productId]);
 
@@ -24,7 +32,7 @@ const RelatedProducts = ({ productId }) => {
           <div
             key={item._id}
             className="related-card"
-            onClick={() => navigate(`/product/${item.id}`)}
+            onClick={() => navigate(`/product/${item.id}`)} // use numeric id
           >
             <img src={item.variants[0]?.image} alt={item.name} />
             <h4>{item.name}</h4>
