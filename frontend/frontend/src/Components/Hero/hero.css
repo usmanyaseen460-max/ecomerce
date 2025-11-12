@@ -1,0 +1,176 @@
+.hero {
+  min-height: 60vh;
+  background: linear-gradient(180deg, #fde1ff, 60%);
+  display: flex;
+  padding: 2rem;
+  align-items: center;
+}
+
+.hero-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-left: 50px;
+  gap: 5px;
+  line-height: 1;
+}
+
+.hero-left h2 {
+  display: flex;
+  font-size: 38px;
+  font-weight: 600;
+  color: #090909;
+}
+
+.hero-left p {
+  font-size: 88px;
+  font-weight: 600;
+  color: #171717;
+  margin: 0;
+}
+
+.hand-icon {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.hand-icon img {
+  width: 85px;
+  border-radius: 20px;
+}
+
+.hero-latest-button div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+  height: 70px;
+  background: black;
+  border-radius: 35px;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  margin-top: 30px;
+  gap: 10px;
+}
+
+.hero-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-right img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1280px) {
+  .hero-left {
+    padding-left: 100px;
+  }
+  .hero-left h2 {
+    font-size: 22px;
+  }
+  .hero-left p {
+    font-size: 60px;
+  }
+  .hand-icon img {
+    width: 80px;
+  }
+  .hero-latest-button div {
+    gap: 10px;
+    width: 250px;
+    height: 60px;
+    margin-top: 20px;
+    font-size: 18px;
+  }
+  .hero-right img {
+    width: 500px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero-left {
+    padding-left: 80px;
+  }
+  .hero-left h2 {
+    font-size: 20px;
+  }
+  .hero-left p {
+    font-size: 50px;
+  }
+  .hand-icon img {
+    width: 65px;
+  }
+  .hero-latest-button div {
+    width: 220px;
+    height: 50px;
+    font-size: 16px;
+  }
+  .hero-right img {
+    width: 400px;
+  }
+}
+
+@media (max-width: 800px) {
+  .hero-left {
+    padding-left: 30px;
+  }
+  .hero-left h2 {
+    font-size: 16px;
+  }
+  .hero-left p {
+    font-size: 40px;
+  }
+  .hand-icon img {
+    width: 50px;
+  }
+  .hero-latest-button div {
+    width: 175px;
+    height: 40px;
+    font-size: 13px;
+  }
+  .hero-right img {
+    width: 300px;
+  }
+}
+
+@media (max-width: 500px) {
+  .hero {
+    flex-direction: column;
+    margin-top: 90px;
+    padding: 1rem;
+  }
+  .hero-right {
+    display: none;
+  }
+  .hero-left {
+    padding-left: 10px;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .hero-left h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  .hero-left p {
+    font-size: 50px;
+  }
+  .hand-icon img {
+    width: 55px;
+  }
+  .hero-latest-button div {
+    width: 180px; /* mobile size kam kiya */
+    height: 45px;
+    font-size: 14px;
+    margin-top: 25px; /* spacing badhaya */
+  }
+}

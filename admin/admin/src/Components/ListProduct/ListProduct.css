@@ -1,0 +1,164 @@
+/* ---------- BASE STYLES ---------- */
+.listproduct {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 82%;
+  height: auto;
+  padding: 10px 50px;
+  margin: 30px auto;
+  border-radius: 6px;
+  background: white;
+  box-sizing: border-box;
+}
+
+.listproduct h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* ---------- HEADER ROW ---------- */
+.listproductformatmainheader {
+  display: grid;
+  grid-template-columns: 3fr 4fr 2fr 6fr 0.8fr; /* Added description column */
+  gap: 10px;
+  width: 100%;
+  padding: 20px 0;
+  color: #454545;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ---------- PRODUCT ROW ---------- */
+.listproductformatmain {
+  display: grid;
+  grid-template-columns: 3fr 4fr 2fr 6fr 0.8fr; /* Added description column */
+  align-items: center;
+  width: 100%;
+  padding: 15px 0;
+  font-weight: 500;
+}
+
+.listproductformatmain p {
+  margin: 0;
+}
+
+/* ---------- VARIANTS ---------- */
+.listproduct-variants-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.variant-item {
+  width: 80px;
+  text-align: center;
+}
+
+.variant-item img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+
+.variant-item p {
+  margin-top: 5px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+/* ---------- REMOVE ICON ---------- */
+.crossicon img {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: flex;
+  margin-left: 30px;
+}
+
+.crossicon img:hover {
+  transform: scale(1.2);
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+/* ✅ Tablet View (≤1024px) */
+@media (max-width: 1024px) {
+  .listproduct {
+    padding: 10px 30px;
+  }
+
+  .listproductformatmainheader,
+  .listproductformatmain {
+    grid-template-columns: 2.5fr 3fr 2fr 4fr 0.8fr; /* Adjusted for description */
+    font-size: 14px;
+  }
+
+  .variant-item {
+    width: 70px;
+  }
+
+  .variant-item img {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+/* ✅ Mobile View (≤600px) */
+@media (max-width: 600px) {
+  .listproduct {
+    padding: 10px 15px;
+    margin: 10px auto;
+  }
+
+  .listproductformatmainheader {
+    display: none; /* hide header labels */
+  }
+
+  .listproductformatmain {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .listproductformatmain p {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .listproduct-variants-container {
+    justify-content: flex-start;
+  }
+
+  .variant-item {
+    width: 70px;
+  }
+
+  .crossicon img {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+}
+
+/* ✅ Very Small Phones (≤400px) */
+@media (max-width: 400px) {
+  .listproductformatmain {
+    font-size: 13px;
+  }
+
+  .variant-item img {
+    width: 55px;
+    height: 55px;
+  }
+
+  .variant-item p {
+    font-size: 11px;
+  }
+}

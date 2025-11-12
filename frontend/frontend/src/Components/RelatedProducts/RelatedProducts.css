@@ -1,0 +1,132 @@
+.related-section {
+  margin: 40px 20px;
+}
+
+.related-section h2 {
+  font-size: 2rem; /* Base font size */
+  margin-bottom: 20px;
+  text-align: center;
+  gap: 20px;
+  
+}
+
+/* Grid for related products */
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px; /* ✅ Fixed negative gap */
+  justify-items: center;
+}
+
+/* Card styling */
+.related-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 300px; /* ✅ Card max width */
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.related-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Image inside card */
+.related-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+/* Product title */
+.related-card h4 {
+  font-size: 1.2rem; /* ✅ Slightly bigger for visibility */
+  margin: 5px 0;
+  color: #333;
+}
+
+/* Product description or price */
+.related-card p {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* ===== Mobile View ===== */
+@media (max-width: 480px) {
+  .related-section h2 {
+    font-size: 1.8rem;
+  }
+
+  .related-card {
+    max-width: 320px; /* Fit smaller screens */
+  }
+
+  .related-card img {
+    height: 280px; /* Smaller image for mobile */
+  }
+
+  .related-card h4 {
+    font-size: 1rem;
+  }
+
+  .related-card p {
+    font-size: 0.9rem;
+  }
+}
+
+/* ===== Tablet View ===== */
+@media (min-width: 481px) and (max-width: 1023px) {
+  .related-section h2 {
+    font-size: 2.2rem;
+  }
+
+  .related-card {
+    max-width: 250px;
+  }
+
+  .related-card img {
+    height: 220px;
+  }
+
+  .related-card h4 {
+    font-size: 1.1rem;
+  }
+
+  .related-card p {
+    font-size: 1rem;
+  }
+}
+
+/* ===== Desktop / Laptop View ===== */
+@media (min-width: 1024px) {
+  .related-section h2 {
+    font-size: 2.5rem; /* ✅ Bigger heading */
+  }
+
+  .related-card {
+    max-width: 300px; /* Full card size */
+  }
+
+  .related-card img {
+    height: 250px;
+  }
+
+  .related-card h4 {
+    font-size: 1.2rem;
+  }
+
+  .related-card p {
+    font-size: 1rem;
+  }
+
+  .related-grid {
+    gap: 15px; /* Slightly reduced gap for desktop */
+  }
+}
