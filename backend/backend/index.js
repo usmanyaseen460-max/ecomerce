@@ -92,7 +92,18 @@ const Newsletter = mongoose.model("Newsletter", newsletterSchema);
 
 // Home
 app.get("/", (req, res) => {
-  res.send("🚀 Express App Running");
+  res.json({
+    success: true,
+    message: "🚀 E-commerce Backend API is running",
+    status: "deployed",
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      products: "/allproducts",
+      orders: "/api/orders",
+      auth: "/login, /signup",
+      admin: "/adminlogin"
+    }
+  });
 });
 
 // ===== Product APIs =====
