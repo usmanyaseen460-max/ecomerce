@@ -292,6 +292,55 @@ app.get("/relatedproducts/:id", async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
+// Get Cart
+app.post("/get/cart", async (req, res) => {
+  try {
+    const authToken = req.headers["auth-token"];
+    if (!authToken) return res.status(401).json({ success: false, message: "Auth token missing" });
+
+    const decoded = jwt.verify(authToken, "secret_ecom");
+    const user = await Users.findById(decoded.id);
+    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+
+    res.json(user.cartData);
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Add to Cart
+app.post("/addtocart", async (req, res) => {
+  try {
+    const authToken = req.headers["auth-token"];
+    const decoded = jwt.verify(authToken, "secret_ecom");
+    const user = await Users.findById(decoded.id);
+    const { itemId, qty } = req.body;
+
+    user.cartData[itemId] = (user.cartData[itemId] || 0) + qty;
+    await user.save();
+
+    res.json({ success: true, cartData: user.cartData });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Remove from Cart
+app.post("/removefromcart", async (req, res) => {
+  try {
+    const authToken = req.headers["auth-token"];
+    const decoded = jwt.verify(authToken, "secret_ecom");
+    const user = await Users.findById(decoded.id);
+    const { itemId } = req.body;
+
+    user.cartData[itemId] = Math.max((user.cartData[itemId] || 0) - 1, 0);
+    await user.save();
+
+    res.json({ success: true, cartData: user.cartData });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
 
 // ===== Start Server =====
 app.listen(port, () => console.log(`🚀 Server Running on Port ${port}`));

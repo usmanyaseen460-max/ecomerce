@@ -90,7 +90,7 @@ const AddProduct = () => {
     });
 
     try {
-      const response = await fetch('http://localhost:4000/addproduct', {
+      const response = await fetch('https://myecommercebackend.vercel.app/addproduct', {
         method: 'POST',
         body: formData,
       });
