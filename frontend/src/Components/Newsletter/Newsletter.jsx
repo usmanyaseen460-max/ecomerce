@@ -12,7 +12,7 @@ const Newsletter = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:4000/api/newsletter", {
+      const res = await fetch("https://myecommercebackend.vercel.app/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

@@ -7,7 +7,6 @@ import "./CartItems.css";
 const CartItems = () => {
   const { all_products = [], cartItems = {}, addToCart, removeFromCart, proceedToCheckout } = useContext(ShopContext);
 
-  // Calculate subtotal
   const subtotal = all_products.reduce((acc, item) => {
     const quantity = cartItems[item.id] || 0;
     const price = Number(item.price ?? 0);
@@ -53,6 +52,7 @@ const CartItems = () => {
               >
                 −
               </button>
+
               <input
                 type="number"
                 min="1"
@@ -64,6 +64,7 @@ const CartItems = () => {
                   else if (diff < 0) removeFromCart(product.id, -diff);
                 }}
               />
+
               <button className="qty-btn plus" onClick={() => addToCart(product.id, 1)}>
                 +
               </button>
@@ -81,48 +82,61 @@ const CartItems = () => {
         );
       })}
 
-      {subtotal === 0 && <p style={{ textAlign: "center", marginTop: "20px" }}>Your cart is empty 😞</p>}
+      {subtotal === 0 && (
+        <p style={{ textAlign: "center", marginTop: "20px" }}>Your cart is empty 😞</p>
+      )}
 
       <div className="cartitems-summary">
         <div className="cart-summary-box">
           <h1>Cart Totals</h1>
+
           <div className="summary-row">
             <p>Subtotal</p>
             <p>PKR {subtotal.toFixed(2)}</p>
           </div>
+
           <div className="summary-row">
             <p>Shipping Fee</p>
             <p>PKR {shippingFee}</p>
           </div>
+
           <div className="summary-row total">
             <h3>Total</h3>
             <h3>PKR {total.toFixed(2)}</h3>
           </div>
 
           <Link to="/checkout">
-           <button
-  className="checkout-btn"
-  onClick={() => {
-    const checkoutData = all_products
-      .filter((p) => cartItems[p.id] > 0)
-      .map((p) => ({
-        id: p.id,
-        name: p.name,
-        price: p.price,
-        variants: [
-          {
-            color: "Default", // or add actual color if available
-            quantity: cartItems[p.id],
-            image: p.image,
-          },
-        ],
-      }));
-    localStorage.setItem("checkoutProduct", JSON.stringify(checkoutData[0] || null));
-  }}
->
-  PROCEED TO CHECKOUT
-</button>
+            <button
+              className="checkout-btn"
+              onClick={() => {
+                const checkoutData = all_products
+                  .filter((p) => cartItems[p.id] > 0)
+                  .map((p) => ({
+                    id: p.id,
+                    name: p.name,
+                    price: p.price,
+                    variants: [
+                      {
+                        color: "Default",
+                        quantity: cartItems[p.id],
+                        image: p.image,
+                      },
+                    ],
+                  }));
 
+                localStorage.setItem(
+                  "checkoutProduct",
+                  JSON.stringify(checkoutData[0] || null)
+                );
+
+                // ✅ MAIN FIX — CALL CONTEXT FUNCTION SAFELY
+                if (proceedToCheckout) {
+                  proceedToCheckout(checkoutData);
+                }
+              }}
+            >
+              PROCEED TO CHECKOUT
+            </button>
           </Link>
         </div>
       </div>

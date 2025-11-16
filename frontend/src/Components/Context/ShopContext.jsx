@@ -16,13 +16,13 @@ const ShopContextProvider = (props) => {
   const [checkoutData, setCheckoutData] = useState({ products: [], subtotal: 0, shipping: 0, total: 0 });
 
   useEffect(() => {
-    fetch("http://localhost:4000/allproducts")
+    fetch("https://myecommercebackend.vercel.app/allproducts")
       .then((res) => res.json())
       .then((data) => setAll_Products(data));
 
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
-      fetch("http://localhost:4000/get/cart", {
+      fetch("https://myecommercebackend.vercel.app/get/cart", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -40,7 +40,7 @@ const ShopContextProvider = (props) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + qty }));
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
-      fetch("http://localhost:4000/addtocart", {
+      fetch("https://myecommercebackend.vercel.app/addtocart", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -58,7 +58,7 @@ const ShopContextProvider = (props) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
-      fetch("http://localhost:4000/removefromcart", {
+      fetch("https://myecommercebackend.vercel.app/removefromcart", {
         method: "POST",
         headers: {
           Accept: "application/json",

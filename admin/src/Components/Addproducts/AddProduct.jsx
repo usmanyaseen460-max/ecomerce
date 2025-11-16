@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import './AddProduct.css';
 import uploadcloud from '../../assets/uploadcloud.png';
 
-const colorsList = ['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White', 'Pink', 'Off White', 'Brown','Dark Brown','Light Brown', 'Light Blue','Cream','Sky Blue','Royal Blue','Navy Blue','Tpink','Pista','Grey','Light Grey','Dark Grey','Mehroon','Mehndi','SevenUp','Zinc','Mustard','orange','Dew','Aqua','Purple','Parrot','Malaysia','Camol','Niswari'];
+const colorsList = [
+  'Red', 'Blue', 'Green', 'Yellow', 'Black', 'White', 'Pink', 'Off White', 'Brown',
+  'Dark Brown', 'Light Brown', 'Light Blue', 'Cream', 'Sky Blue', 'Royal Blue', 'Navy Blue',
+  'Tpink', 'Pista', 'Grey', 'Light Grey', 'Dark Grey', 'Mehroon', 'Mehndi', 'SevenUp', 'Zinc',
+  'Mustard', 'Orange', 'Dew', 'Aqua', 'Purple', 'Parrot', 'Malaysia', 'Camol', 'Niswari'
+];
 
 const AddProduct = () => {
   const [title, setTitle] = useState('');
@@ -24,10 +29,7 @@ const AddProduct = () => {
   };
 
   const handleTempColorChange = (index, color) => {
-    setTempColorSelections(prev => ({
-      ...prev,
-      [index]: color,
-    }));
+    setTempColorSelections(prev => ({ ...prev, [index]: color }));
   };
 
   const addFilesWithColors = () => {
@@ -46,7 +48,8 @@ const AddProduct = () => {
     const filteredPairsToAdd = pairsToAdd.filter(newPair =>
       !imageColorPairs.some(
         existingPair =>
-          existingPair.file.name === newPair.file.name && existingPair.color === newPair.color
+          existingPair.file.name === newPair.file.name &&
+          existingPair.color === newPair.color
       )
     );
 
@@ -72,11 +75,6 @@ const AddProduct = () => {
     const added = addFilesWithColors();
     if (!added) return;
 
-    const combinedPairs = [...imageColorPairs, ...tempFiles.map((file, idx) => ({
-      file,
-      color: tempColorSelections[idx],
-    }))];
-
     if (!validate()) return;
 
     const formData = new FormData();
@@ -84,18 +82,28 @@ const AddProduct = () => {
     formData.append('price', price);
     formData.append('description', description);
 
-    combinedPairs.forEach(({ file, color }) => {
+    imageColorPairs.forEach(({ file, color }) => {
       formData.append('images', file);
       formData.append('colors', color);
     });
 
     try {
-      const response = await fetch('http://localhost:4000/addproduct', {
+      const response = await fetch('https://myecommercebackend.vercel.app/addproduct', {
         method: 'POST',
         body: formData,
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get('content-type');
+
+      let data = null;
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        console.error("Non-JSON response from server:", text);
+        alert("Server returned unexpected response. Check console for details.");
+        return;
+      }
 
       if (response.ok) {
         alert('Product uploaded successfully!');
@@ -107,7 +115,7 @@ const AddProduct = () => {
         setTempColorSelections({});
         setErrors({});
       } else {
-        alert(`Upload failed: ${data.message || 'Unknown error'}`);
+        alert(`Upload failed: ${data?.message || 'Unknown error'}`);
       }
     } catch (error) {
       alert(`Error uploading product: ${error.message}`);
@@ -184,9 +192,7 @@ const AddProduct = () => {
                   >
                     <option value="">Select color</option>
                     {colorsList.map(color => (
-                      <option key={color} value={color}>
-                        {color}
-                      </option>
+                      <option key={color} value={color}>{color}</option>
                     ))}
                   </select>
                 </div>

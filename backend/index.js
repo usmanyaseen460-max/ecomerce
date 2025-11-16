@@ -9,15 +9,14 @@ const fs = require("fs");
 const app = express();
 const port = 4000;
 
+require("dotenv").config();
+
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
 // ===== Middleware =====
 app.use(express.json());
 app.use(cors());
-
-// ===== Ensure upload folder exists =====
-const uploadDir = path.join(__dirname, "upload", "images");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
 
 // ===== MongoDB Connection =====
 mongoose
@@ -27,19 +26,33 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.log("MongoDB Error:", err));
 
-// ===== Multer Setup =====
-const storage = multer.diskStorage({
-  destination: uploadDir,
-  filename: (req, file, cb) => {
-    const uniqueSuffix =
-      Date.now() + "-" + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
-    cb(null, file.fieldname + "-" + uniqueSuffix);
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "ecommerce_products",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
   },
 });
+
+// Multer Upload Setup
 const upload = multer({ storage });
 
-// Serve Images
-app.use("/images", express.static(uploadDir));
+// Middleware to catch Multer/Cloudinary errors
+const uploadMiddleware = (req, res, next) => {
+  upload.array("images")(req, res, function (err) {
+    if (err) {
+      console.error("❌ Multer / Cloudinary Upload Error:", err);
+      return res.status(500).json({ success: false, error: err.message });
+    }
+    next();
+  });
+};
 
 // ===== Product Model =====
 const productSchema = new mongoose.Schema({
@@ -107,7 +120,7 @@ app.get("/", (req, res) => {
 });
 
 // ===== Product APIs =====
-app.post("/addproduct", upload.array("images"), async (req, res) => {
+app.post("/addproduct", uploadMiddleware, async (req, res) => {
   try {
     let products = await Product.find({});
     let id = products.length > 0 ? products[products.length - 1].id + 1 : 1;
@@ -117,7 +130,7 @@ app.post("/addproduct", upload.array("images"), async (req, res) => {
 
     const variants = req.files.map((file, i) => ({
       color: colorArr[i],
-      image: `http://localhost:${port}/images/${file.filename}`,
+      image: file.path,
     }));
 
     const product = new Product({ id, name, description, price, variants });
@@ -125,6 +138,7 @@ app.post("/addproduct", upload.array("images"), async (req, res) => {
 
     res.json({ success: true, message: "✅ Product added successfully", product });
   } catch (err) {
+    console.error("Add Product Error:", err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -249,7 +263,6 @@ app.get("/api/orders", async (req, res) => {
   }
 });
 
-
 app.delete("/api/orders/:id", async (req, res) => {
   try {
     const deletedOrder = await Order.findByIdAndDelete(req.params.id);
@@ -303,6 +316,63 @@ app.get("/relatedproducts/:id", async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
+// Get Cart
+app.post("/get/cart", async (req, res) => {
+  try {
+    const authToken = req.headers["auth-token"];
+    if (!authToken) return res.status(401).json({ success: false, message: "Auth token missing" });
+
+    const decoded = jwt.verify(authToken, "secret_ecom");
+    const user = await Users.findById(decoded.id);
+    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+
+    res.json(user.cartData);
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Add to Cart
+app.post("/addtocart", async (req, res) => {
+  try {
+    const authToken = req.headers["auth-token"];
+    const decoded = jwt.verify(authToken, "secret_ecom");
+    const user = await Users.findById(decoded.id);
+    const { itemId, qty } = req.body;
+
+    user.cartData[itemId] = (user.cartData[itemId] || 0) + qty;
+    await user.save();
+
+    res.json({ success: true, cartData: user.cartData });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Remove from Cart
+app.post("/removefromcart", async (req, res) => {
+  try {
+    const authToken = req.headers["auth-token"];
+    const decoded = jwt.verify(authToken, "secret_ecom");
+    const user = await Users.findById(decoded.id);
+    const { itemId } = req.body;
+
+    user.cartData[itemId] = Math.max((user.cartData[itemId] || 0) - 1, 0);
+    await user.save();
+
+    res.json({ success: true, cartData: user.cartData });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+// ===== Global Error Handler =====
+app.use((err, req, res, next) => {
+  console.error("💥 Global Error:", err);
+  res.status(500).json({ success: false, message: "Server error", error: err.message });
+});
+
+// ===== Start Server =====
+app.listen(port, () => console.log(`🚀 Server Running on Port ${port}`));
 
 // ===== Start Server =====
 app.listen(port, () => console.log(`🚀 Server Running on Port ${port}`));
