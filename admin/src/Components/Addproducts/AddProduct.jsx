@@ -93,17 +93,7 @@ const AddProduct = () => {
         body: formData,
       });
 
-      const contentType = response.headers.get('content-type');
-
-      let data = null;
-      if (contentType && contentType.includes('application/json')) {
-        data = await response.json();
-      } else {
-        const text = await response.text();
-        console.error("Non-JSON response from server:", text);
-        alert("Server returned unexpected response. Check console for details.");
-        return;
-      }
+      const data = await response.json();
 
       if (response.ok) {
         alert('Product uploaded successfully!');
@@ -115,7 +105,7 @@ const AddProduct = () => {
         setTempColorSelections({});
         setErrors({});
       } else {
-        alert(`Upload failed: ${data?.message || 'Unknown error'}`);
+        alert(`Upload failed: ${data.message || 'Unknown error'}`);
       }
     } catch (error) {
       alert(`Error uploading product: ${error.message}`);

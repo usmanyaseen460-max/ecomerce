@@ -26,12 +26,14 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.log("MongoDB Error:", err));
 
+// ===== Cloudinary Config =====
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
+// ===== Cloudinary Multer Storage =====
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -40,19 +42,9 @@ const storage = new CloudinaryStorage({
   },
 });
 
-// Multer Upload Setup
 const upload = multer({ storage });
 
-// Middleware to catch Multer/Cloudinary errors
-const uploadMiddleware = (req, res, next) => {
-  upload.array("images")(req, res, function (err) {
-    if (err) {
-      console.error("❌ Multer / Cloudinary Upload Error:", err);
-      return res.status(500).json({ success: false, error: err.message });
-    }
-    next();
-  });
-};
+module.exports = upload;
 
 // ===== Product Model =====
 const productSchema = new mongoose.Schema({
@@ -120,7 +112,7 @@ app.get("/", (req, res) => {
 });
 
 // ===== Product APIs =====
-app.post("/addproduct", uploadMiddleware, async (req, res) => {
+app.post("/addproduct", upload.array("images"), async (req, res) => {
   try {
     let products = await Product.find({});
     let id = products.length > 0 ? products[products.length - 1].id + 1 : 1;
@@ -138,7 +130,6 @@ app.post("/addproduct", uploadMiddleware, async (req, res) => {
 
     res.json({ success: true, message: "✅ Product added successfully", product });
   } catch (err) {
-    console.error("Add Product Error:", err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -263,6 +254,7 @@ app.get("/api/orders", async (req, res) => {
   }
 });
 
+
 app.delete("/api/orders/:id", async (req, res) => {
   try {
     const deletedOrder = await Order.findByIdAndDelete(req.params.id);
@@ -365,17 +357,6 @@ app.post("/removefromcart", async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
-<<<<<<< HEAD
-// ===== Global Error Handler =====
-app.use((err, req, res, next) => {
-  console.error("💥 Global Error:", err);
-  res.status(500).json({ success: false, message: "Server error", error: err.message });
-});
-
-// ===== Start Server =====
-app.listen(port, () => console.log(`🚀 Server Running on Port ${port}`));
-=======
->>>>>>> origin/main
 
 // ===== Start Server =====
 app.listen(port, () => console.log(`🚀 Server Running on Port ${port}`));
