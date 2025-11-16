@@ -365,6 +365,7 @@ app.post("/removefromcart", async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
+<<<<<<< HEAD
 // ===== Global Error Handler =====
 app.use((err, req, res, next) => {
   console.error("💥 Global Error:", err);
@@ -373,6 +374,8 @@ app.use((err, req, res, next) => {
 
 // ===== Start Server =====
 app.listen(port, () => console.log(`🚀 Server Running on Port ${port}`));
+=======
+>>>>>>> origin/main
 
 // ===== Start Server =====
 app.listen(port, () => console.log(`🚀 Server Running on Port ${port}`));
