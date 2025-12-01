@@ -1,18 +1,24 @@
+/* ================= Checkout Container ================= */
 .checkout-container {
   min-height: 100vh;
   background: #f9f9f9;
   padding: 20px;
   font-family: "Segoe UI", Roboto, Arial, sans-serif;
   box-sizing: border-box;
+
+  display: flex;
+  justify-content: center; /* default center */
 }
 
+/* ================= Checkout Content ================= */
 .checkout-content {
   max-width: 480px;
-  margin: auto;
   width: 100%;
+  margin-left: 20px; /* thoda left shift for desktop */
   padding: 0 10px;
 }
 
+/* ================= Form Sections ================= */
 .section {
   margin-bottom: 24px;
 }
@@ -24,6 +30,7 @@
   color: #000;
 }
 
+/* Inputs */
 .input {
   width: 100%;
   padding: 14px 16px;
@@ -48,6 +55,7 @@
   display: block;
 }
 
+/* Checkbox / Radio / Shipping Options */
 .checkbox-wrapper,
 .shipping-option,
 .payment-option,
@@ -61,9 +69,9 @@
 .billing-option {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-start; /* left align inside box */
   gap: 10px;
-  border: 2px solid #0066ff;
+  border: 1px solid #0066ff;
   border-radius: 8px;
   background: #fff;
   width: 100%;
@@ -72,18 +80,7 @@
   margin-bottom: 8px;
 }
 
-.free-tag {
-  font-weight: 600;
-  color: #000;
-  margin-left: auto;
-}
-
-.secure-text {
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 12px;
-}
-
+/* Order Summary */
 .product-summary {
   background: #fff;
   border-radius: 10px;
@@ -96,6 +93,7 @@
   display: flex;
   gap: 10px;
   margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 
 .summary-img {
@@ -128,7 +126,6 @@
 .total-row {
   border-top: 1px solid #ddd;
   padding-top: 12px;
-  font-weight: 600;
 }
 
 .total-label,
@@ -136,19 +133,7 @@
   font-weight: 600;
 }
 
-.submit-btn {
-  background: black;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  padding: 14px;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 16px;
-}
-
+/* Success Message */
 .success-message {
   background: #d4edda;
   color: #155724;
@@ -157,5 +142,84 @@
   border-radius: 8px;
   font-weight: 500;
   margin-bottom: 20px;
-  text-align: center;
+}
+
+/* Order Button */
+.order-btn,
+.submit-btn {
+  width: 100%;
+  padding: 14px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  background: black;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.3s;
+}
+
+/* Truck Animation */
+.truck {
+  margin-left: 12px;
+  font-size: 22px;
+  transition: transform 0.4s ease;
+}
+
+.truck {
+  animation: moveTruck 1s ease infinite alternate;
+}
+
+@keyframes moveTruck {
+  from { transform: translateX(0); }
+  to { transform: translateX(8px); }
+}
+
+/* ================= Responsive ================= */
+@media (max-width: 1024px) {
+  /* tablet & mobile: content center aligned */
+  .checkout-content {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .summary-img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .product-summary-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .shipping-option,
+  .payment-option,
+  .billing-option {
+    padding: 10px;
+  }
+
+  .order-btn {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 400px) {
+  .input {
+    font-size: 14px;
+    padding: 12px 14px;
+  }
+
+  .order-btn {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
 }
