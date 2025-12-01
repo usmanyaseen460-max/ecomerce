@@ -25,7 +25,6 @@ const CheckoutPage = () => {
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [buttonText, setButtonText] = useState("Complete Order");
-  const [truckHidden, setTruckHidden] = useState(true);
 
   const provinces = {
     Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Sialkot"],
@@ -64,12 +63,12 @@ const CheckoutPage = () => {
       newErrors.customCity = "Please enter your city name";
     if (!form.address.trim()) newErrors.address = "Address is required";
     if (!form.phone.trim()) newErrors.phone = "Phone number is required";
- else if (!/^03\d{9}$/.test(form.phone)) {
-  newErrors.phone = "Phone must be 11 digits starting with 03";
-}
-
+    else if (!/^03\d{9}$/.test(form.phone)) {
+      newErrors.phone = "Phone must be 11 digits starting with 03";
+    }
     if (!form.agreeToTerms)
       newErrors.agreeToTerms = "You must agree to terms and conditions";
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -78,7 +77,6 @@ const CheckoutPage = () => {
     if (!validateForm() || isSubmitting) return;
 
     setIsSubmitting(true);
-    setTruckHidden(false);
     setButtonText("Processing...");
 
     const finalCity = form.city === "Other" ? form.customCity : form.city;
@@ -117,13 +115,10 @@ const CheckoutPage = () => {
       .then((data) => console.log("✅ Order saved:", data))
       .catch((err) => console.error("❌ Error saving order:", err));
 
-    setTimeout(() => setButtonText("Order Placed ✓"), 3400);
-    setTimeout(() => setTruckHidden(true), 4500);
     setTimeout(() => {
-      setOrderPlaced(false);
-      setIsSubmitting(false);
-      setButtonText("Complete Order");
-    }, 7400);
+      setOrderPlaced(true);
+      setButtonText("Order Placed ✓");
+    }, 1000);
   };
 
   const isFormValid =
@@ -153,7 +148,6 @@ const CheckoutPage = () => {
           </div>
         )}
 
-        {/* Delivery Form */}
         <div className="section">
           <h2 className="section-title">Delivery</h2>
 
@@ -173,6 +167,7 @@ const CheckoutPage = () => {
             onChange={handleChange}
             placeholder="First name (optional)"
             className="input"
+            disabled={orderPlaced}
           />
 
           <input
@@ -182,6 +177,7 @@ const CheckoutPage = () => {
             onChange={handleChange}
             placeholder="Last name *"
             className={`input ${errors.lastName ? "input-error" : ""}`}
+            disabled={orderPlaced}
           />
           {errors.lastName && <span className="error-text">{errors.lastName}</span>}
 
@@ -190,6 +186,7 @@ const CheckoutPage = () => {
             value={form.province}
             onChange={handleChange}
             className={`input ${errors.province ? "input-error" : ""}`}
+            disabled={orderPlaced}
           >
             <option value="">Select Province *</option>
             {Object.keys(provinces).map((province) => (
@@ -205,7 +202,7 @@ const CheckoutPage = () => {
             value={form.city}
             onChange={handleChange}
             className={`input ${errors.city ? "input-error" : ""}`}
-            disabled={!form.province}
+            disabled={!form.province || orderPlaced}
           >
             <option value="">
               {form.province ? "Select City *" : "First select province"}
@@ -228,6 +225,7 @@ const CheckoutPage = () => {
               onChange={handleChange}
               placeholder="Enter your city name *"
               className={`input ${errors.customCity ? "input-error" : ""}`}
+              disabled={orderPlaced}
             />
           )}
 
@@ -238,6 +236,7 @@ const CheckoutPage = () => {
             onChange={handleChange}
             placeholder="Address *"
             className={`input ${errors.address ? "input-error" : ""}`}
+            disabled={orderPlaced}
           />
           <input
             type="text"
@@ -246,6 +245,7 @@ const CheckoutPage = () => {
             onChange={handleChange}
             placeholder="Apartment (optional)"
             className="input"
+            disabled={orderPlaced}
           />
           <input
             type="text"
@@ -254,6 +254,7 @@ const CheckoutPage = () => {
             onChange={handleChange}
             placeholder="Postal Code (optional)"
             className="input"
+            disabled={orderPlaced}
           />
 
           <div className="form-group phone-wrapper">
@@ -265,6 +266,7 @@ const CheckoutPage = () => {
               placeholder="Phone (03xxxxxxxxx) *"
               className={`input ${errors.phone ? "input-error" : ""}`}
               maxLength="11"
+              disabled={orderPlaced}
             />
             <HelpCircle size={20} className="help-icon" />
             {errors.phone && <span className="error-text">{errors.phone}</span>}
@@ -276,6 +278,7 @@ const CheckoutPage = () => {
               name="saveInfo"
               checked={form.saveInfo}
               onChange={handleChange}
+              disabled={orderPlaced}
             />
             Save this information for next time
           </label>
@@ -301,6 +304,7 @@ const CheckoutPage = () => {
               value="COD"
               checked={form.payment === "COD"}
               onChange={handleChange}
+              disabled={orderPlaced}
             />
             Cash on Delivery (COD)
           </label>
@@ -344,9 +348,9 @@ const CheckoutPage = () => {
                 name="agreeToTerms"
                 checked={form.agreeToTerms}
                 onChange={handleChange}
-                style={{ marginRight: "8px" }}
+                disabled={orderPlaced}
               />
-              I agree to the terms and conditions
+                I agree to the terms and conditions
             </label>
             {errors.agreeToTerms && (
               <span className="error-text">{errors.agreeToTerms}</span>
@@ -359,11 +363,10 @@ const CheckoutPage = () => {
           <button
             className="submit-btn"
             onClick={handleSubmit}
-            disabled={!isFormValid || isSubmitting}
+            disabled={!isFormValid || isSubmitting || orderPlaced}
           >
             {buttonText}
           </button>
-          {!truckHidden && <div className="truck">🚚💨</div>}
         </div>
       </div>
     </div>
