@@ -1,102 +1,180 @@
-.foter{
+/* -------------------- MAIN FOOTER -------------------- */
+
+.foter {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 50px;
+    padding: 40px 0;
+    background: #f8f8f8;
+    width: 100%;
 }
-.foter-logo{
+
+/* -------------------- LOGO + HEADING -------------------- */
+
+.foter-logo {
     display: flex;
     align-items: center;
-    gap: 20px;
+    justify-content: center;
+    flex-wrap: nowrap;      
+    white-space: nowrap;    
+    gap: 15px;
 }
-.foter-logo p{
-    color: #383838;
+
+.foter-logo img {
+    width: 150px;
+    height: auto;
+}
+
+.foter-logo p {
+    color: #222;
     font-size: 46px;
     font-weight: 700;
+    margin: 0;
+    letter-spacing: 1px;
 }
-.foter-links{
+
+/* -------------------- LINKS -------------------- */
+
+.foter-links {
     display: flex;
     list-style: none;
     gap: 50px;
-    color: black;
+    color: #333;
     font-size: 20px;
+    font-weight: 500;
+    padding: 0;
 }
-.foter-links li{
+
+.foter-links li {
     cursor: pointer;
-
-
+    transition: 0.3s;
 }
-.foter-social-icon{
+
+.foter-links li:hover {
+    color: #0bbf58;  /* light green hover */
+    transform: translateY(-2px);
+}
+
+/* -------------------- SOCIAL ICONS -------------------- */
+
+.foter-social-icon {
     display: flex;
     gap: 20px;
-    background: none;
 }
-.foter-icon-container{
-   padding: 10px;
-   padding-bottom: 1px;
 
-   
-  
+.foter-icon-container {
+   padding: 8px;
+   padding-bottom: 1px;
+   transition: 0.3s;
 }
-.foter-copyright{
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 30px;
-width: 100%;
-margin-bottom: 30px;
-color: #1a1a1a;
-font-size: 20px;
+
+.foter-icon-container:hover {
+    transform: scale(1.15);
 }
-.foter-copyright hr{
-    width: 80%;
+
+.foter-icon-container a svg {
+  width: 40px !important;
+  height: 40px !important;
+  transition: 0.3s;
+  fill: #0bbf58;        /* green icons */
+}
+
+.foter-icon-container:hover a svg {
+    fill: #000;
+}
+
+/* -------------------- COPYRIGHT SECTION -------------------- */
+
+.foter-copyright {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    width: 100%;
+    margin-bottom: 30px;
+    color: #1a1a1a;
+    font-size: 18px;
+}
+
+.foter-copyright hr {
+    width: 85%;
     border: none;
-    border-radius: 10px;
     height: 3px;
+    border-radius: 10px;
     background: #c7c7c7;
 }
-.foter-logo img{
-    width: 150px;
-    height: 150px;
-}
-.foter-icon-container a svg {
-  width: 40px !important;   /* increase width */
-  height: 40px !important;  /* increase height */
+
+/* -------------------- RESPONSIVE -------------------- */
+
+/* Tablet */
+@media (max-width: 900px) {
+    .foter {
+        gap: 30px;
+        padding: 30px 0;
+    }
+
+    .foter-logo img {
+        width: 120px;
+    }
+
+    .foter-logo p {
+        font-size: 34px;
+    }
+
+    .foter-links {
+        font-size: 18px;
+        gap: 30px;
+    }
 }
 
-@media (max-width:800px) {
+/* Mobile Medium */
+@media (max-width: 700px) {
+    .foter-logo img {
+        width: 90px;
+    }
 
-    .foter{
+    .foter-logo p {
+        font-size: 26px;
+    }
+
+    .foter-links {
+        font-size: 16px;
         gap: 20px;
     }
 
-    .foter-logo{
-        gap: 10px;
-        
-    }
-    .foter-logo img{
-      transform: scale(0.75);
+    .foter-icon-container a svg {
+        width: 30px !important;
+        height: 30px !important;
     }
 
-    .foter-logo p{
-        font-size: 25px;
-margin-right: 60px;
+    .foter-copyright {
+        font-size: 15px;
+    }
+}
+
+/* Mobile Small */
+@media (max-width: 500px) {
+    .foter-logo img {
+        width: 70px;
     }
 
-    .foter-links{
+    .foter-logo p {
+        font-size: 18px;
+    }
 
+    .foter-links {
         font-size: 14px;
-        gap: 20px;
-        margin-top: -20px;
-        margin-bottom: 10px; 
-        margin-left: -30px;
+        gap: 15px;
     }
 
-    .foter-icon-container {
-width: 22px;
+    .foter-icon-container a svg {
+        width: 26px !important;
+        height: 26px !important;
     }
-    .foter-copyright{
+
+    .foter-copyright {
         font-size: 13px;
     }
 }

@@ -69,6 +69,10 @@
   border-radius: 20px;
   object-fit: cover;
 }
+.hero-latest-button a {
+  text-decoration: none;  /* underline remove */
+  color: white;           /* text color safe */
+}
 
 /* ---------- Responsive ---------- */
 

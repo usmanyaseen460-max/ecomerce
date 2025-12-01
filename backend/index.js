@@ -40,6 +40,7 @@ const storage = new CloudinaryStorage({
     folder: "ecommerce_products",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
   },
+  
 });
 
 const upload = multer({ storage });

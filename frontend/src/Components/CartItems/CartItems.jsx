@@ -128,8 +128,7 @@ const CartItems = () => {
                   "checkoutProduct",
                   JSON.stringify(checkoutData[0] || null)
                 );
-
-                // ✅ MAIN FIX — CALL CONTEXT FUNCTION SAFELY
+                
                 if (proceedToCheckout) {
                   proceedToCheckout(checkoutData);
                 }

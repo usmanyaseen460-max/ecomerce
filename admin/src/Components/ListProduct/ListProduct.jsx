@@ -7,7 +7,7 @@ const ListProduct = () => {
 
   const fetchInfo = async () => {
     try {
-      const res = await fetch('https://myecommercebackend.vercel.app/allproducts');
+      const res = await fetch('http://localhost:4000/allproducts');
       const data = await res.json();
       setAllProducts(data);
     } catch (err) {
@@ -23,7 +23,7 @@ const ListProduct = () => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
 
     try {
-      const res = await fetch('https://myecommercebackend.vercel.app/removeproduct', {
+      const res = await fetch('http://localhost:4000/removeproduct', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id }),
