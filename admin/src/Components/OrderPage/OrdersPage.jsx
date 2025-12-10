@@ -12,6 +12,8 @@ const OrdersPage = () => {
         const res = await fetch("http://localhost:4000/api/orders");
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         const data = await res.json();
+        console.log(data);
+        
         setOrders(data);
       } catch (err) {
         console.error("Error fetching orders:", err);

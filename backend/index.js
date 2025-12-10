@@ -104,8 +104,8 @@ app.get("/", (req, res) => {
       products: "/allproducts",
       orders: "/api/orders",
       auth: "/login, /signup",
-      admin: "/adminlogin"
-    }
+      admin: "/adminlogin",
+    },
   });
 });
 
@@ -120,25 +120,29 @@ app.post("/addproduct", async (req, res) => {
 
     // Handle both old format (with files) and new format (with Cloudinary URLs)
     let variants = [];
-    
+
     if (images && Array.isArray(images)) {
       // New format: Cloudinary URLs with colors
-      variants = images.map(item => ({
+      variants = images.map((item) => ({
         color: item.color,
         image: item.url,
       }));
     } else {
       // Fallback for old format (if still needed)
-      return res.status(400).json({ 
-        success: false, 
-        error: "Images array with Cloudinary URLs is required" 
+      return res.status(400).json({
+        success: false,
+        error: "Images array with Cloudinary URLs is required",
       });
     }
 
     const product = new Product({ id, name, description, price, variants });
     await product.save();
 
-    res.json({ success: true, message: "✅ Product added successfully", product });
+    res.json({
+      success: true,
+      message: "✅ Product added successfully",
+      product,
+    });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -161,7 +165,11 @@ app.post("/addproduct-legacy", upload.array("images"), async (req, res) => {
     const product = new Product({ id, name, description, price, variants });
     await product.save();
 
-    res.json({ success: true, message: "✅ Product added successfully", product });
+    res.json({
+      success: true,
+      message: "✅ Product added successfully",
+      product,
+    });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -182,7 +190,9 @@ app.get("/allproducts", async (req, res) => {
 app.post("/signup", async (req, res) => {
   let check = await Users.findOne({ email: req.body.email });
   if (check)
-    return res.status(400).json({ success: false, errors: "Email already used" });
+    return res
+      .status(400)
+      .json({ success: false, errors: "Email already used" });
 
   let cart = {};
   for (let i = 0; i < 300; i++) cart[i] = 0;
@@ -217,10 +227,15 @@ app.post("/adminlogin", async (req, res) => {
     const admin = await Admin.findOne({ username });
 
     if (!admin || admin.password !== password) {
-      return res.json({ success: false, message: "Invalid username or password" });
+      return res.json({
+        success: false,
+        message: "Invalid username or password",
+      });
     }
 
-    const token = jwt.sign({ id: admin._id }, "secret_admin", { expiresIn: "2h" });
+    const token = jwt.sign({ id: admin._id }, "secret_admin", {
+      expiresIn: "2h",
+    });
     res.json({ success: true, token });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -234,31 +249,53 @@ app.post("/adminlogout", (req, res) => {
 // ===== Order APIs =====
 app.post("/api/orders", async (req, res) => {
   try {
-    const { name, phone, province, city, address, payment, totalAmount, items } = req.body;
+    const {
+      name,
+      phone,
+      province,
+      city,
+      address,
+      payment,
+      totalAmount,
+      items,
+    } = req.body;
 
-    const enrichedItems = await Promise.all(items.map(async (item) => {
-      const product = await Product.findOne({ id: item.productId });
-      let productName = product ? product.name : "Unknown Product";
-      
-      let image = null;
-      if (product && item.color) {
-        const variant = product.variants.find(v => v.color === item.color);
-        if (variant) image = variant.image;
-      }
+    const enrichedItems = await Promise.all(
+      items.map(async (item) => {
+        const product = await Product.findOne({ id: item.productId });
+        let productName = product ? product.name : "Unknown Product";
 
-      return {
-        ...item,
-        productName,
-        image,
-      };
-    }));
+        let image = null;
+        if (product && item.color) {
+          const variant = product.variants.find((v) => v.color === item.color);
+          if (variant) image = variant.image;
+        }
+
+        return {
+          ...item,
+          productName,
+          image,
+        };
+      })
+    );
 
     const newOrder = new Order({
-      name, phone, province, city, address, payment, totalAmount, items: enrichedItems
+      name,
+      phone,
+      province,
+      city,
+      address,
+      payment,
+      totalAmount,
+      items: enrichedItems,
     });
 
     await newOrder.save();
-    res.json({ success: true, message: "✅ Order placed successfully", order: newOrder });
+    res.json({
+      success: true,
+      message: "✅ Order placed successfully",
+      order: newOrder,
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -267,19 +304,23 @@ app.get("/api/orders", async (req, res) => {
   try {
     const orders = await Order.find({}).sort({ date: -1 });
 
-    const enrichedOrders = await Promise.all(orders.map(async (order) => {
-      const updatedItems = await Promise.all(order.items.map(async (item) => {
-        if (!item.productName) {
-          const product = await Product.findOne({ id: item.productId });
-          return {
-            ...item,
-            productName: product ? product.name : "Unknown Product"
-          };
-        }
-        return item;
-      }));
-      return { ...order.toObject(), items: updatedItems };
-    }));
+    const enrichedOrders = await Promise.all(
+      orders.map(async (order) => {
+        const updatedItems = await Promise.all(
+          order.items.map(async (item) => {
+            if (!item.productName) {
+              const product = await Product.findOne({ id: item.productId });
+              return {
+                ...item,
+                productName: product ? product.name : "Unknown Product",
+              };
+            }
+            return item;
+          })
+        );
+        return { ...order.toObject(), items: updatedItems };
+      })
+    );
 
     res.json(enrichedOrders);
   } catch (err) {
@@ -287,17 +328,22 @@ app.get("/api/orders", async (req, res) => {
   }
 });
 
-
 app.delete("/api/orders/:id", async (req, res) => {
   try {
     const deletedOrder = await Order.findByIdAndDelete(req.params.id);
     if (!deletedOrder)
-      return res.status(404).json({ success: false, message: "Order not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
 
-    res.status(200).json({ success: true, message: "Order deleted successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "Order deleted successfully" });
   } catch (error) {
     console.error("Error deleting order:", error);
-    res.status(500).json({ success: false, message: "Error deleting order", error });
+    res
+      .status(500)
+      .json({ success: false, message: "Error deleting order", error });
   }
 });
 
@@ -307,16 +353,22 @@ app.post("/api/newsletter", async (req, res) => {
     const { email } = req.body;
 
     if (!email)
-      return res.status(400).json({ success: false, message: "Email is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Email is required" });
 
     const exists = await Newsletter.findOne({ email });
     if (exists)
-      return res.status(400).json({ success: false, message: "Already subscribed" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Already subscribed" });
 
     const newSubscriber = new Newsletter({ email });
     await newSubscriber.save();
 
-    res.status(200).json({ success: true, message: "✅ Subscribed successfully!" });
+    res
+      .status(200)
+      .json({ success: true, message: "✅ Subscribed successfully!" });
   } catch (error) {
     console.error("Newsletter error:", error);
     res.status(500).json({ success: false, message: "Server error" });
@@ -328,7 +380,9 @@ app.get("/relatedproducts/:id", async (req, res) => {
   try {
     const productId = Number(req.params.id);
     if (isNaN(productId)) {
-      return res.status(400).json({ success: false, message: "Invalid product ID" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid product ID" });
     }
 
     const all = await Product.find({});
@@ -345,11 +399,17 @@ app.get("/relatedproducts/:id", async (req, res) => {
 app.post("/get/cart", async (req, res) => {
   try {
     const authToken = req.headers["auth-token"];
-    if (!authToken) return res.status(401).json({ success: false, message: "Auth token missing" });
+    if (!authToken)
+      return res
+        .status(401)
+        .json({ success: false, message: "Auth token missing" });
 
     const decoded = jwt.verify(authToken, "secret_ecom");
     const user = await Users.findById(decoded.id);
-    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
 
     res.json(user.cartData);
   } catch (err) {

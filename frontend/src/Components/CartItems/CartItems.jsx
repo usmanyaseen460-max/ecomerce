@@ -7,6 +7,9 @@ import "./CartItems.css";
 const CartItems = () => {
   const { all_products = [], cartItems = {}, addToCart, removeFromCart, proceedToCheckout } = useContext(ShopContext);
 
+  console.log(cartItems);
+  
+
   const subtotal = all_products.reduce((acc, item) => {
     const quantity = cartItems[item.id] || 0;
     const price = Number(item.price ?? 0);
@@ -38,7 +41,7 @@ const CartItems = () => {
         return (
           <div className="cartitem" key={product.id}>
             <div className="cartitem-product">
-              <img src={product.image} className="cartitem-image" alt={product.name} />
+              <img src={product.variants?.[0]?.image || product.image} className="cartitem-image" alt={product.name} />
             </div>
 
             <p className="cartitem-title">{product.name}</p>
@@ -119,7 +122,7 @@ const CartItems = () => {
                       {
                         color: "Default",
                         quantity: cartItems[p.id],
-                        image: p.image,
+                        image: p.variants?.[0]?.image || p.image,
                       },
                     ],
                   }));

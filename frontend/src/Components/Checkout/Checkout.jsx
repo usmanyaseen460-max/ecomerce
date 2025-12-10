@@ -90,6 +90,7 @@ const CheckoutPage = () => {
       payment: form.payment,
       items: checkoutProduct
         ? checkoutProduct.variants.map((v) => ({
+            productId: checkoutProduct.id,
             productName: checkoutProduct.name,
             color: v.color,
             quantity: v.quantity,
