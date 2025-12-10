@@ -21,7 +21,7 @@ const WhatsAppContactForm = () => {
 
     const { name, phone, email, message } = formData;
 
-    const whatsappURL = `https://wa.me/+9203251173461?text=
+    const whatsappURL = `https://wa.me/+9203417659521?text=
       Name: ${name}%0A
       Phone: ${phone}%0A
       Email: ${email}%0A
