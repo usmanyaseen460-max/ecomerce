@@ -33,19 +33,16 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
-// ===== Cloudinary Multer Storage =====
+// ===== Cloudinary Multer Storage (for legacy support only) =====
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "ecommerce_products",
     allowed_formats: ["jpg", "jpeg", "png", "webp"],
   },
-  
 });
 
 const upload = multer({ storage });
-
-module.exports = upload;
 
 // ===== Product Model =====
 const productSchema = new mongoose.Schema({
@@ -113,7 +110,42 @@ app.get("/", (req, res) => {
 });
 
 // ===== Product APIs =====
-app.post("/addproduct", upload.array("images"), async (req, res) => {
+// Updated endpoint to handle Cloudinary URLs directly
+app.post("/addproduct", async (req, res) => {
+  try {
+    let products = await Product.find({});
+    let id = products.length > 0 ? products[products.length - 1].id + 1 : 1;
+
+    const { name, price, description, images } = req.body;
+
+    // Handle both old format (with files) and new format (with Cloudinary URLs)
+    let variants = [];
+    
+    if (images && Array.isArray(images)) {
+      // New format: Cloudinary URLs with colors
+      variants = images.map(item => ({
+        color: item.color,
+        image: item.url,
+      }));
+    } else {
+      // Fallback for old format (if still needed)
+      return res.status(400).json({ 
+        success: false, 
+        error: "Images array with Cloudinary URLs is required" 
+      });
+    }
+
+    const product = new Product({ id, name, description, price, variants });
+    await product.save();
+
+    res.json({ success: true, message: "✅ Product added successfully", product });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Keep the old endpoint for backward compatibility (if needed)
+app.post("/addproduct-legacy", upload.array("images"), async (req, res) => {
   try {
     let products = await Product.find({});
     let id = products.length > 0 ? products[products.length - 1].id + 1 : 1;

@@ -1,16 +1,45 @@
-# React + Vite
+# Admin Panel - E-commerce
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the admin panel for the e-commerce application, built with React + Vite.
 
-Currently, two official plugins are available:
+## 🚀 Recent Updates
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Cloudinary Integration
+- ✅ **Removed local file uploads** - No more local storage of images
+- ✅ **Added Cloudinary widget** - Direct upload to cloud storage
+- ✅ **Improved UX** - Better image management with preview and color assignment
+- ✅ **Optimized delivery** - Automatic image optimization and CDN delivery
 
-## React Compiler
+## 🛠️ Setup
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1. Install Dependencies
+```bash
+npm install
+```
 
-## Expanding the ESLint configuration
+### 2. Configure Cloudinary
+1. Create a Cloudinary account at [cloudinary.com](https://cloudinary.com)
+2. Update `src/config/cloudinary.js` with your credentials
+3. Follow the detailed setup guide in `CLOUDINARY_SETUP.md`
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 3. Start Development Server
+```bash
+npm run dev
+```
+
+## 📁 Key Files
+- `src/Components/Addproducts/AddProduct.jsx` - Product creation with Cloudinary
+- `src/config/cloudinary.js` - Cloudinary configuration
+- `CLOUDINARY_SETUP.md` - Detailed setup instructions
+
+## 🔧 Features
+- Product management with multiple images
+- Color variant assignment
+- Direct cloud upload (no server storage)
+- Image preview and management
+- Responsive design
+
+## 📝 Notes
+- Make sure to configure Cloudinary before using the add product feature
+- The backend has been updated to handle Cloudinary URLs instead of local files
+- Old local upload files can be safely removed after migration
