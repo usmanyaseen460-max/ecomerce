@@ -145,7 +145,7 @@ const AddProduct = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:4000/addproduct", {
+      const response = await fetch("https://mybackend-psi.vercel.app/addproduct", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

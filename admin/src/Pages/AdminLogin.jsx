@@ -10,7 +10,7 @@ const AdminLogin = () => {
 
   const handleLogin = async () => {
     try {
-      const res = await fetch(`http://localhost:4000/adminlogin`, {
+      const res = await fetch(`https://mybackend-psi.vercel.app/adminlogin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),

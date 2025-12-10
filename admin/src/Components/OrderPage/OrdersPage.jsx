@@ -9,7 +9,7 @@ const OrdersPage = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch("http://localhost:4000/api/orders");
+        const res = await fetch("https://mybackend-psi.vercel.app/api/orders");
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         const data = await res.json();
         console.log(data);
@@ -30,7 +30,7 @@ const OrdersPage = () => {
     if (!window.confirm("Are you sure you want to delete this order?")) return;
 
     try {
-      const res = await fetch(`http://localhost:4000/api/orders/${id}`, {
+      const res = await fetch(`https://mybackend-psi.vercel.app/api/orders/${id}`, {
         method: "DELETE"
       });
       const data = await res.json();
