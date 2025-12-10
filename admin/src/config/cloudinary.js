@@ -3,8 +3,8 @@
 
 export const CLOUDINARY_CONFIG = {
   // Get these from your Cloudinary Dashboard
-  CLOUD_NAME: 'your-cloud-name', // Replace with your cloud name
-  UPLOAD_PRESET: 'your-upload-preset', // Replace with your upload preset name
+  CLOUD_NAME: 'dmtcn2gpt', // Replace with your cloud name
+  UPLOAD_PRESET: 'blogapp', // Replace with your upload preset name
   
   // Widget configuration
   WIDGET_OPTIONS: {

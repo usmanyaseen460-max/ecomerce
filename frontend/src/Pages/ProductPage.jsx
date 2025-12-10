@@ -12,7 +12,6 @@ const ProductPage = () => {
 
   const [product, setProduct] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [quantity, setQuantity] = useState(1);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [selectedVariants, setSelectedVariants] = useState([]);
 
@@ -21,15 +20,11 @@ const ProductPage = () => {
     if (found) {
       setProduct(found);
       setCurrentImageIndex(0);
+      setSelectedVariants([]); // reset selection on product change
     }
   }, [all_products, id]);
 
   if (!product) return <p>Loading...</p>;
-
-  const handleQuantityChange = (type) => {
-    if (type === "increment") setQuantity((prev) => prev + 1);
-    else if (type === "decrement" && quantity > 1) setQuantity((prev) => prev - 1);
-  };
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) =>
@@ -48,8 +43,20 @@ const ProductPage = () => {
     if (exists) {
       setSelectedVariants(selectedVariants.filter((v) => v.color !== variant.color));
     } else {
-      setSelectedVariants([...selectedVariants, { ...variant, quantity }]);
+      setSelectedVariants([...selectedVariants, { ...variant, quantity: 1 }]);
     }
+  };
+
+  const handleQuantityChangeForColor = (color, type) => {
+    setSelectedVariants(prev =>
+      prev.map(v => {
+        if (v.color === color) {
+          const newQty = type === "increment" ? v.quantity + 1 : Math.max(1, v.quantity - 1);
+          return { ...v, quantity: newQty };
+        }
+        return v;
+      })
+    );
   };
 
   const handleBuyNow = () => {
@@ -75,6 +82,7 @@ const ProductPage = () => {
     <>
       <div className="luxury-container">
         <div className="luxury-product">
+          {/* ===== IMAGE SECTION ===== */}
           <div className="image-section">
             <div className="main-image-box">
               <button className="arrow left-arrow" onClick={handlePrevImage}>
@@ -91,23 +99,41 @@ const ProductPage = () => {
               </button>
             </div>
 
+            {/* Color Selection */}
             <div className="color-names-wrapper">
               {product.variants.map((v, idx) => {
-                const selected = selectedVariants.some((sv) => sv.color === v.color);
+                const isSelected = selectedVariants.some(sv => sv.color === v.color);
                 return (
                   <div
                     key={idx}
-                    className={`color-name-box ${selected ? "selected" : ""}`}
+                    className={`color-name-box ${isSelected ? "selected" : ""}`}
                     onClick={() => handleColorSelect(v)}
                   >
-                    <input type="checkbox" checked={selected} readOnly />
-                    {v.color}
+                    <input type="checkbox" checked={isSelected} readOnly />
+                    <span>{v.color}</span>
                   </div>
                 );
               })}
             </div>
+
+            {/* Quantity selectors (right side, one line each) */}
+            {selectedVariants.length > 0 && (
+              <div className="quantity-section-wrapper">
+                {selectedVariants.map((v, idx) => (
+                  <div key={idx} className="quantity-row">
+                    <span>{v.color}</span>
+                    <div className="quantity-selector">
+                      <button onClick={() => handleQuantityChangeForColor(v.color, "decrement")}>−</button>
+                      <span>{v.quantity}</span>
+                      <button onClick={() => handleQuantityChangeForColor(v.color, "increment")}>+</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
+          {/* ===== DETAILS SECTION ===== */}
           <div className="details-section">
             <h1 className="product-title">{product.name}</h1>
             <p className="product-price">Rs. {product.price}</p>
@@ -116,20 +142,19 @@ const ProductPage = () => {
             <div className="fiveStar">
               {Array.from({ length: 5 }, (_, i) => {
                 if (rating >= i + 1) return <FaStar key={i} color="#FFD700" size={22} />;
-                else if (rating > i)
-                  return <FaStarHalfAlt key={i} color="#FFD700" size={22} />;
+                else if (rating > i) return <FaStarHalfAlt key={i} color="#FFD700" size={22} />;
                 else return <FaRegStar key={i} color="#FFD700" size={22} />;
               })}
             </div>
 
-            <div className="quantity-selector">
-              <button onClick={() => handleQuantityChange("decrement")}>−</button>
-              <span>{quantity}</span>
-              <button onClick={() => handleQuantityChange("increment")}>+</button>
-            </div>
-
             <div className="button-group">
-              <button className="cart-button" onClick={() => addToCart(product.id, quantity)}>
+              <button
+                className="cart-button"
+                onClick={() => {
+                  selectedVariants.forEach(v => addToCart(product.id, v.quantity, v.color));
+                  alert("Added to Cart!");
+                }}
+              >
                 Add to Cart
               </button>
               <button className="buy-button" onClick={handleBuyNow}>
@@ -139,6 +164,7 @@ const ProductPage = () => {
           </div>
         </div>
 
+        {/* ===== LIGHTBOX ===== */}
         {isLightboxOpen && (
           <div className="lightbox">
             <button className="arrow left-arrow" onClick={handlePrevImage}>
@@ -160,7 +186,6 @@ const ProductPage = () => {
         )}
       </div>
 
-      {/* ✅ Related Products */}
       <RelatedProducts productId={product.id} />
     </>
   );
