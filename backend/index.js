@@ -18,6 +18,7 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 app.use(express.json());
 app.use(cors());
 
+//MongoDb URI
 let MONGODB_URI = "mongodb+srv://webdevwithusman:webdevwithusman@cluster0.cbo8qpt.mongodb.net/e-commerce"
 
 // ===== MongoDB Connection =====
