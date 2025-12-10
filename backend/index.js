@@ -18,13 +18,10 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 app.use(express.json());
 app.use(cors());
 
+let MONGODB_URI = "mongodb+srv://webdevwithusman:webdevwithusman@cluster0.cbo8qpt.mongodb.net/e-commerce"
+
 // ===== MongoDB Connection =====
-mongoose
-  .connect(
-    "mongodb+srv://webdevwithusman:webdevwithusman@cluster0.cbo8qpt.mongodb.net/e-commerce"
-  )
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.log("MongoDB Error:", err));
+mongoose.connect(MONGODB_URI).then(() => console.log("✅ MongoDB Connected")).catch((err) => console.log("MongoDB Error:", err));
 
 // ===== Cloudinary Config =====
 cloudinary.config({
