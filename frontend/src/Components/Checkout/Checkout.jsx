@@ -107,7 +107,7 @@ const CheckoutPage = () => {
       date: new Date().toISOString(),
     };
 
-    fetch("http://localhost:4000/api/orders", {
+    fetch("https://mybackend-psi.vercel.app/api/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(orderData),

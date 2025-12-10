@@ -9,7 +9,7 @@ const RelatedProducts = ({ productId }) => {
   useEffect(() => {
     if (!productId) return;
 
-    fetch(`http://localhost:4000/relatedproducts/${productId}`)
+    fetch(`https://mybackend-psi.vercel.app/relatedproducts/${productId}`)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {

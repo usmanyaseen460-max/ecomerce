@@ -13,16 +13,21 @@ const getDefaultCart = () => {
 const ShopContextProvider = (props) => {
   const [all_products, setAll_Products] = useState([]);
   const [cartItems, setCartItems] = useState(getDefaultCart());
-  const [checkoutData, setCheckoutData] = useState({ products: [], subtotal: 0, shipping: 0, total: 0 });
+  const [checkoutData, setCheckoutData] = useState({
+    products: [],
+    subtotal: 0,
+    shipping: 0,
+    total: 0,
+  });
 
   useEffect(() => {
-    fetch("http://localhost:4000/allproducts")
+    fetch("https://mybackend-psi.vercel.app/allproducts")
       .then((res) => res.json())
       .then((data) => setAll_Products(data));
 
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
-      fetch("http://localhost:4000/get/cart", {
+      fetch("https://mybackend-psi.vercel.app/get/cart", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -40,7 +45,7 @@ const ShopContextProvider = (props) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + qty }));
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
-      fetch("http://localhost:4000/addtocart", {
+      fetch("https://mybackend-psi.vercel.app/addtocart", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -58,7 +63,7 @@ const ShopContextProvider = (props) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     const authToken = localStorage.getItem("auth-token");
     if (authToken) {
-      fetch("http://localhost:4000/removefromcart", {
+      fetch("https://mybackend-psi.vercel.app/removefromcart", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -73,18 +78,26 @@ const ShopContextProvider = (props) => {
   };
 
   const getTotalCartItems = () => {
-    return Object.values(cartItems).reduce((total, qty) => total + (qty > 0 ? qty : 0), 0);
+    return Object.values(cartItems).reduce(
+      (total, qty) => total + (qty > 0 ? qty : 0),
+      0
+    );
   };
 
   const proceedToCheckout = () => {
-    const products = all_products.filter((p) => cartItems[p.id] > 0).map((p) => ({
-      id: p.id,
-      name: p.name,
-      qty: cartItems[p.id],
-      price: Number(p.new_price ?? p.new_Price ?? p.newPrice ?? 0),
-    }));
+    const products = all_products
+      .filter((p) => cartItems[p.id] > 0)
+      .map((p) => ({
+        id: p.id,
+        name: p.name,
+        qty: cartItems[p.id],
+        price: Number(p.new_price ?? p.new_Price ?? p.newPrice ?? 0),
+      }));
 
-    const subtotal = products.reduce((acc, item) => acc + item.price * item.qty, 0);
+    const subtotal = products.reduce(
+      (acc, item) => acc + item.price * item.qty,
+      0
+    );
     const shipping = subtotal > 0 ? 200 : 0;
     const total = subtotal + shipping;
 
