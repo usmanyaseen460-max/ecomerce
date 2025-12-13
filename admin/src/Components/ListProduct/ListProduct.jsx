@@ -58,7 +58,7 @@ const ListProduct = () => {
           <div key={product.id} className="listproductformatmain">
             <p>{product.name}</p>
             <p>{product.description || 'No description'}</p> {/* Show description */}
-            <p>${product.price}</p>
+            <p>Pkr : {product.price}</p>
 
             <div className="listproduct-variants-container">
               {product.variants?.length ? (

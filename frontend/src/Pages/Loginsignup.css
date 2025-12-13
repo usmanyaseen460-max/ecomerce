@@ -31,7 +31,7 @@
   border-radius: 5px;
 }
 .login-container button {
-  width: 580px;
+  width: 560px;
   height: 62px;
   background: black;
   color: white;
@@ -40,7 +40,7 @@
   font-weight: 500;
   border: none;
   cursor: pointer;
-  border-radius: 5px;
+
 }
 .login-signup-login {
   margin-top: 20px;
@@ -85,7 +85,7 @@
     width: 93%;
   }
   .login-container button {
-    width: 100%;
+    width: 90%;
   }
 
   .login-signup-login {
@@ -111,7 +111,8 @@
     height: 50px;
   }
   .login-container button {
-    height: 50px;
+    height: 40px;
     font-size: 16px;
+   
   }
 }
