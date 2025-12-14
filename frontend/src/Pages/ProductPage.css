@@ -513,7 +513,7 @@
   }
 
   .main-image-box .right-arrow {
-    right: 18px;
+    right: -1px;
     background: none;
   }
 

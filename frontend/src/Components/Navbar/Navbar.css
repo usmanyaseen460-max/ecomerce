@@ -395,37 +395,37 @@ a {
   }
 }
 /* ===== ONLY for mobile 320px – 374px ===== */
-@media (max-width: 360px) {
-
+/* Screens between 321px and 360px */
+@media (min-width: 321px) and (max-width: 360px) {
   /* Container for logout + cart + search */
   .nav-login-cart {
-    transform: translateX(-px); /* left shift */
-    gap: 8px;                     /* compact spacing */
+    transform: translateX(-10px); /* slightly left */
+    gap: 12px;                   /* increased spacing */
   }
 
-  /* Cart icon smaller */
+  /* Cart icon slightly bigger */
   .nav-login-cart img {
-    height: 26px;
+    height: 28px; /* slightly bigger */
     width: auto;
   }
 
-  /* Cart counter inside & fit */
+  /* Cart counter slightly smaller and repositioned */
   .nav-car-counter {
-    width: 16px;
-    height: 16px;
-    font-size: 10px;
-    margin-left: -22px;  /* left shift */
-    margin-top: -22px;
+    width: 14px;   /* smaller */
+    height: 14px;  /* smaller */
+    font-size: 9px; 
+    margin-left: -25px; /* adjust for new size */
+    margin-top: -18px;
   }
 
-  /* Logout button smaller */
+  /* Logout button same as 360px */
   .nav-login-cart button {
     width: 110px;
     height: 38px;
     font-size: 14px;
   }
 
-  /* Search button smaller */
+  /* Search button same as 360px */
   .nav-search-btn {
     width: 36px;
     height: 36px;
@@ -433,28 +433,4 @@ a {
   }
 }
 
-/* Extra narrow screens (optional fine tuning) */
-@media (max-width: 320px) {
-  .nav-login-cart {
-    transform: translateX(-22px); /* thoda aur left */
-  }
-  .nav-login-cart button {
-    width: 100px;
-    height: 36px;
-  }
-  .nav-login-cart img {
-    height: 24px;
-  }
-  .nav-car-counter {
-    width: 14px;
-    height: 14px;
-    font-size: 9px;
-    margin-left: -20px;
-    margin-top: -20px;
-  }
-  .nav-search-btn {
-    width: 32px;
-    height: 32px;
-    font-size: 14px;
-  }
-}
+
