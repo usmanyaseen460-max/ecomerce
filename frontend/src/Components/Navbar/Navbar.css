@@ -395,11 +395,11 @@ a {
   }
 }
 /* ===== ONLY for mobile 320px – 374px ===== */
-@media (max-width: 374px) {
+@media (max-width: 360px) {
 
   /* Container for logout + cart + search */
   .nav-login-cart {
-    transform: translateX(-18px); /* left shift */
+    transform: translateX(-px); /* left shift */
     gap: 8px;                     /* compact spacing */
   }
 
