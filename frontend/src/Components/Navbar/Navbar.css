@@ -394,3 +394,67 @@ a {
     margin-left: -35px;
   }
 }
+/* ===== ONLY for mobile 320px – 374px ===== */
+@media (max-width: 374px) {
+
+  /* Container for logout + cart + search */
+  .nav-login-cart {
+    transform: translateX(-18px); /* left shift */
+    gap: 8px;                     /* compact spacing */
+  }
+
+  /* Cart icon smaller */
+  .nav-login-cart img {
+    height: 26px;
+    width: auto;
+  }
+
+  /* Cart counter inside & fit */
+  .nav-car-counter {
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    margin-left: -22px;  /* left shift */
+    margin-top: -22px;
+  }
+
+  /* Logout button smaller */
+  .nav-login-cart button {
+    width: 110px;
+    height: 38px;
+    font-size: 14px;
+  }
+
+  /* Search button smaller */
+  .nav-search-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+}
+
+/* Extra narrow screens (optional fine tuning) */
+@media (max-width: 320px) {
+  .nav-login-cart {
+    transform: translateX(-22px); /* thoda aur left */
+  }
+  .nav-login-cart button {
+    width: 100px;
+    height: 36px;
+  }
+  .nav-login-cart img {
+    height: 24px;
+  }
+  .nav-car-counter {
+    width: 14px;
+    height: 14px;
+    font-size: 9px;
+    margin-left: -20px;
+    margin-top: -20px;
+  }
+  .nav-search-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+}
