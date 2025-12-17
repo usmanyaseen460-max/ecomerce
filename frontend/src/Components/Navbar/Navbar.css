@@ -119,6 +119,7 @@ a {
 
 /* Search button */
 .nav-search-btn {
+  position: fixed;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -141,6 +142,7 @@ a {
 }
 .search-overlay {
   top: -150px;
+  
 }
 
 .search-overlay.active {
@@ -399,13 +401,13 @@ a {
 @media (min-width: 321px) and (max-width: 360px) {
   /* Container for logout + cart + search */
   .nav-login-cart {
-    transform: translateX(-8px); /* slightly left */
+    transform: translateX(-7px); /* slightly left */
     gap: 12px;                   /* increased spacing */
   }
 
   /* Cart icon slightly bigger */
   .nav-login-cart img {
-    height: 28px; /* slightly bigger */
+    height: 32px; /* slightly bigger */
     width: auto;
   }
 
@@ -433,4 +435,41 @@ a {
   }
 }
 
+/* ---------- TOPBAR SEARCH ICON FIX ---------- */
+.search-box {
+  position: relative; /* icon ko absolute ke liye relative parent */
+}
 
+.search-input-icon {
+  position: relative; /* fixed relative to search-box */
+  left: 15px;
+
+  transform: translateY(-210%);
+  pointer-events: none; /* click input pe hi ho */
+  color: #333;
+  font-size: 18px;
+}
+
+/* ---------- NAVBAR SEARCH ICON STAYS IN PLACE ---------- */
+.nav-login-cart {
+  position: relative; /* ensure navbar icon container relative */
+}
+
+.nav-search-icon {
+  position: relative; /* normal flow, apni jagah pe rahe */
+  cursor: pointer;
+  color: black;
+  font-size: 20px;
+  z-index: 2000;
+}
+/* Topbar search overlay close icon fix */
+.search-close {
+  position: relative; /* absolute relative to search-box */
+  left: 90%;        /* distance from right edge of input */
+
+  transform: translateY(-160%);
+  cursor: pointer;
+  font-size: 22px;
+  color: #333;
+ 
+}
