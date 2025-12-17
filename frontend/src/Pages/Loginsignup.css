@@ -31,11 +31,11 @@
   border-radius: 5px;
 }
 .login-container button {
-  width: 560px;
+  width: 435px;
   height: 62px;
   background: black;
   color: white;
-  margin-top: 30px;
+  margin-top: 20px;
   font-size: 22px;
   font-weight: 500;
   border: none;
@@ -43,7 +43,7 @@
 
 }
 .login-signup-login {
-  margin-top: 20px;
+  margin-top: 10px;
   color: #5c5c5c;
   font-size: 18px;
   font-weight: 500;
