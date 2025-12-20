@@ -1,4 +1,5 @@
 .confirmation-container {
+  width: 90%; /* Makes container adjust to screen size */
   max-width: 500px;
   margin: 40px auto;
   padding: 30px;
@@ -8,8 +9,10 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #222;
   text-align: center;
+  box-sizing: border-box; /* Ensures padding doesn't overflow */
 }
 
+/* Titles and text */
 .title {
   font-weight: 900;
   font-size: 2.5rem;
@@ -31,4 +34,42 @@
   font-size: 1rem;
   color: #555;
   font-style: italic;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+  .title {
+    font-size: 2rem; /* Slightly smaller title */
+  }
+  .greeting {
+    font-size: 1.2rem;
+  }
+  .order-number {
+    font-size: 1rem;
+  }
+  .contact-info {
+    font-size: 0.9rem;
+  }
+  .confirmation-container {
+    padding: 20px; /* Less padding on smaller screens */
+  }
+}
+
+/* Very small screens (phones) */
+@media (max-width: 400px) {
+  .title {
+    font-size: 1.7rem;
+  }
+  .greeting {
+    font-size: 1.1rem;
+  }
+  .order-number {
+    font-size: 0.95rem;
+  }
+  .contact-info {
+    font-size: 0.85rem;
+  }
+  .confirmation-container {
+    padding: 15px;
+  }
 }
