@@ -53,7 +53,7 @@ const Newcollections = () => {
             </div>
           ))
         ) : (
-          <p>No new products yet</p>
+          <p>Wait For Products </p>
         )}
       </div>
     </div>
