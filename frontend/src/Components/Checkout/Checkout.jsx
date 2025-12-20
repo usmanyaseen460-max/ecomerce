@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { HelpCircle } from "lucide-react";
 import "./Checkout.css";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutPage = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -18,6 +19,7 @@ const CheckoutPage = () => {
     payment: "COD",
     billingAddress: "same",
     agreeToTerms: false,
+    productId: null,
   });
 
   const [checkoutProduct, setCheckoutProduct] = useState(null);
@@ -35,23 +37,73 @@ const CheckoutPage = () => {
     "Azad Kashmir": ["Muzaffarabad", "Mirpur", "Rawalakot"],
   };
 
+  // Load product and form
   useEffect(() => {
-    const stored = localStorage.getItem("checkoutProduct");
-    if (stored) setCheckoutProduct(JSON.parse(stored));
-  }, []);
+    const storedProduct = localStorage.getItem("checkoutProduct");
+    const storedForm = localStorage.getItem("checkoutForm");
+
+    if (storedProduct) {
+      const parsedProduct = JSON.parse(storedProduct);
+      setCheckoutProduct(parsedProduct);
+
+      if (storedForm) {
+        const parsedForm = JSON.parse(storedForm);
+
+        if (parsedForm.productId === parsedProduct.id && !orderPlaced) {
+          // Same product and order not placed → load saved form
+          setForm(parsedForm);
+        } else {
+          // Different product OR order placed → reset form
+          setForm({
+            firstName: "",
+            lastName: "",
+            country: "Pakistan",
+            province: "",
+            city: "",
+            customCity: "",
+            address: "",
+            apartment: "",
+            postalCode: "",
+            phone: "",
+            saveInfo: false,
+            payment: "COD",
+            billingAddress: "same",
+            agreeToTerms: false,
+            productId: parsedProduct.id,
+          });
+          localStorage.removeItem("checkoutForm");
+          setOrderPlaced(false);
+        }
+      } else {
+        setForm(f => ({ ...f, productId: parsedProduct.id }));
+        setOrderPlaced(false);
+      }
+    }
+  }, [orderPlaced]);
 
   const handleChange = (e) => {
+    if (orderPlaced) return;
+
     const { name, value, type, checked } = e.target;
+    let updatedForm = {
+      ...form,
+      [name]: type === "checkbox" ? checked : value,
+      productId: checkoutProduct?.id,
+    };
+
     if (name === "province") {
-      setForm({ ...form, [name]: value, city: "", customCity: "" });
+      updatedForm.city = "";
+      updatedForm.customCity = "";
       setErrors({ ...errors, province: "", city: "" });
-    } else if (name === "city" && value !== "Other") {
-      setForm({ ...form, [name]: value, customCity: "" });
-      setErrors({ ...errors, city: "" });
-    } else {
-      setForm({ ...form, [name]: type === "checkbox" ? checked : value });
-      setErrors({ ...errors, [name]: "" });
     }
+
+    if (name === "city" && value !== "Other") {
+      updatedForm.customCity = "";
+      setErrors({ ...errors, city: "" });
+    }
+
+    setForm(updatedForm);
+    localStorage.setItem("checkoutForm", JSON.stringify(updatedForm));
   };
 
   const validateForm = () => {
@@ -66,8 +118,6 @@ const CheckoutPage = () => {
     else if (!/^03\d{9}$/.test(form.phone)) {
       newErrors.phone = "Phone must be 11 digits starting with 03";
     }
-    if (!form.agreeToTerms)
-      newErrors.agreeToTerms = "You must agree to terms and conditions";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -113,13 +163,21 @@ const CheckoutPage = () => {
       body: JSON.stringify(orderData),
     })
       .then((res) => res.json())
-      .then((data) => console.log("✅ Order saved:", data))
-      .catch((err) => console.error("❌ Error saving order:", err));
+      .then((data) => {
+        console.log("✅ Order saved:", data);
 
-    setTimeout(() => {
-      setOrderPlaced(true);
-      setButtonText("Order Placed ✓");
-    }, 1000);
+        setTimeout(() => {
+          setOrderPlaced(true);
+          setButtonText("Order Placed ✓");
+          localStorage.removeItem("checkoutForm"); // clear form after order
+          navigate("/orderconfirmation");
+        }, 1000);
+      })
+      .catch((err) => {
+        console.error("❌ Error saving order:", err);
+        setIsSubmitting(false);
+        setButtonText("Complete Order");
+      });
   };
 
   const isFormValid =
@@ -128,7 +186,7 @@ const CheckoutPage = () => {
     (form.city && (form.city !== "Other" || form.customCity)) &&
     form.address &&
     form.phone &&
-    form.agreeToTerms;
+    /^03\d{9}$/.test(form.phone);
 
   const productSubtotal = checkoutProduct
     ? checkoutProduct.variants.reduce(
@@ -269,20 +327,10 @@ const CheckoutPage = () => {
               maxLength="11"
               disabled={orderPlaced}
             />
-            <HelpCircle size={20} className="help-icon" />
-            {errors.phone && <span className="error-text">{errors.phone}</span>}
+           
           </div>
 
-          <label className="checkbox-wrapper">
-            <input
-              type="checkbox"
-              name="saveInfo"
-              checked={form.saveInfo}
-              onChange={handleChange}
-              disabled={orderPlaced}
-            />
-            Save this information for next time
-          </label>
+          
         </div>
 
         {/* Shipping */}
@@ -343,32 +391,20 @@ const CheckoutPage = () => {
               <span className="total-amount">Rs {total.toLocaleString()}</span>
             </div>
 
-            <label className="checkbox-wrapper" style={{ marginTop: "15px" }}>
-              <input
-                type="checkbox"
-                name="agreeToTerms"
-                checked={form.agreeToTerms}
-                onChange={handleChange}
-                disabled={orderPlaced}
-              />
-                I agree to the terms and conditions
-            </label>
-            {errors.agreeToTerms && (
-              <span className="error-text">{errors.agreeToTerms}</span>
-            )}
           </div>
         )}
-
         {/* Submit Button */}
-        <div className="button-container">
-          <button
-            className="submit-btn"
-            onClick={handleSubmit}
-            disabled={!isFormValid || isSubmitting || orderPlaced}
-          >
-            {buttonText}
-          </button>
-        </div>
+        
+<div className="button-container">
+ <button
+  className="submit-btn"
+  onClick={handleSubmit}
+  disabled={!isFormValid || isSubmitting || orderPlaced}
+>
+  {buttonText}
+</button>
+
+</div>
       </div>
     </div>
   );

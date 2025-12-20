@@ -1,0 +1,34 @@
+.confirmation-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px;
+  border: 2px solid #333;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+  text-align: center;
+}
+
+.title {
+  font-weight: 900;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.greeting {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+}
+
+.order-number {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.contact-info {
+  font-size: 1rem;
+  color: #555;
+  font-style: italic;
+}

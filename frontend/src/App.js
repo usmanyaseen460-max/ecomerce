@@ -11,6 +11,7 @@ import CheckoutPage from './Components/Checkout/Checkout';
 import Navbar from './Components/Navbar/Navbar';
 import Footer from './Components/Footer/Footer';
 import WhatsappButton from './Components/WhatsappButton';
+import OrderConfirmation from './Pages/OrderConfirmation';
 
 /* 🔹 TikTok Pixel Load (ESLint Safe) */
 const loadTikTokPixel = () => {
@@ -79,6 +80,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Loginsignup />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+           <Route path="/orderconfirmation" element={<OrderConfirmation />} />
       </Routes>
 
       <Footer />
