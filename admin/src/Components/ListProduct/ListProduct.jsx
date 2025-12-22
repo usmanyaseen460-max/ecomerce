@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ListProduct.css';
-import crossicon from '../../assets/crossicon.png';
 
 const ListProduct = () => {
   const [allproducts, setAllProducts] = useState([]);
+  const navigate = useNavigate();
 
   const fetchInfo = async () => {
     try {
@@ -41,23 +42,27 @@ const ListProduct = () => {
     }
   };
 
+  const edit_product = (product) => {
+    navigate('/updateproduct', { state: { product } });
+  };
+
   return (
     <div className="listproduct">
       <h1>All Product List</h1>
 
       <div className="listproductformatmainheader">
         <p>Product Name</p>
-        <p>Description</p> {/* Added Description header */}
+        <p>Description</p>
         <p>Price</p>
         <p>Variants</p>
-        <p>Remove</p>
+        <p>Actions</p>
       </div>
 
       <div className="listproductallproduct">
         {allproducts.map(product => (
           <div key={product.id} className="listproductformatmain">
             <p>{product.name}</p>
-            <p>{product.description || 'No description'}</p> {/* Show description */}
+            <p>{product.description || 'No description'}</p>
             <p>Pkr : {product.price}</p>
 
             <div className="listproduct-variants-container">
@@ -71,8 +76,23 @@ const ListProduct = () => {
               ) : <p>No variants</p>}
             </div>
 
-            <div className="crossicon" onClick={() => remove_product(product.id)}>
-              <img src={crossicon} alt="Remove" />
+            <div className="action-icons">
+              <span
+                className="editicon"
+                style={{ cursor: 'pointer', marginRight: '10px' }}
+                onClick={() => edit_product(product)}
+                title="Edit Product"
+              >
+                ✏️
+              </span>
+              <span
+                className="crossicon"
+                style={{ cursor: 'pointer' }}
+                onClick={() => remove_product(product.id)}
+                title="Remove Product"
+              >
+                ❌
+              </span>
             </div>
           </div>
         ))}

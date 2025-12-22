@@ -449,6 +449,36 @@ app.post("/removefromcart", async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
+// Update product
+app.put("/updateproduct/:id", async (req, res) => {
+  try {
+    const productId = Number(req.params.id);
+    const { name, price, description, sizes, images } = req.body;
+
+    const variants = images.map(item => ({
+      color: item.color,
+      image: item.url,
+    }));
+
+    const updatedProduct = await Product.findOneAndUpdate(
+      { id: productId },
+      { name, price, description, sizes, variants },
+      { new: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+
+    res.json({
+      success: true,
+      message: "✅ Product updated successfully",
+      product: updatedProduct,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
 
 // ===== Start Server =====
 app.listen(port, () => console.log(`🚀 Server Running on Port ${port}`));

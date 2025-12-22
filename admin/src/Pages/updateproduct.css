@@ -1,0 +1,184 @@
+/* Container */
+.updateproduct {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 800px;
+  padding: 30px 50px;
+  margin: 20px 30px;
+  border-radius: 6px;
+  background: white;
+  font-family: "Poppins", sans-serif;
+  color: #7b7b7b;
+}
+
+/* Form heading */
+.updateproduct h2 {
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* Labels */
+.updateproduct label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #555;
+}
+
+/* Inputs, textarea, select unified style */
+.updateproduct input,
+.updateproduct select,
+.updateproduct textarea {
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 4px;
+  padding: 15px;
+  border: 1px solid #c3c3c3;
+  outline: none;
+  color: #555;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  transition: border-color 0.2s ease;
+  font-family: inherit;
+}
+
+.updateproduct input:focus,
+.updateproduct select:focus,
+.updateproduct textarea:focus {
+  border-color: black;
+}
+
+/* Sizes wrapper */
+.sizes-wrapper {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+  flex-wrap: wrap;
+}
+
+.size-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  user-select: none;
+}
+
+.size-option.selected {
+  background-color: black; /* highlight */
+  color: white;
+  border-color: #4caf50;
+}
+
+.size-option input {
+  cursor: pointer;
+}
+
+/* Upload button */
+.upload-btn {
+  cursor: pointer;
+  margin: 10px 0;
+  padding: 8px 15px;
+  border: 1.5px solid #4a90e2;
+  border-radius: 5px;
+  color: #4a90e2;
+  font-weight: 600;
+  text-align: center;
+  width: fit-content;
+  user-select: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.upload-btn:hover {
+ 
+  color: white;
+}
+
+/* Uploaded images container */
+.uploaded-images {
+  margin-top: 20px;
+}
+
+/* Each image item */
+.image-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Image styling */
+.image-item img {
+  margin-right: 10px;
+  vertical-align: middle;
+  border-radius: 8px;
+  object-fit: cover;
+  width: 100px;
+  height: 100px;
+  border: 2px solid #ddd;
+  transition: border-color 0.3s ease;
+}
+
+.image-item img:hover {
+  border-color: #555;
+}
+
+/* Select color dropdown */
+.image-item select {
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-family: inherit;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Update button */
+.update-btn {
+  margin-top: 20px;
+  width: 160px;
+  height: 50px;
+  border-radius: 6px;
+  background: black;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.update-btn:hover {
+  background-color: #333;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .updateproduct {
+    width: auto;
+    padding: 30px;
+    margin: 20px;
+  }
+  .sizes-wrapper {
+    flex-direction: column;
+  }
+  .image-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .image-item img {
+    margin-bottom: 8px;
+  }
+  .update-btn {
+    width: 100%;
+  }
+}
