@@ -42,9 +42,11 @@ const ListProduct = () => {
     }
   };
 
-  const edit_product = (product) => {
-    navigate('/updateproduct', { state: { product } });
-  };
+  // ✅ Corrected navigation to include product ID in URL
+ const edit_product = (product) => {
+  navigate(`/admin/updateproduct/${product.id}`);
+};
+
 
   return (
     <div className="listproduct">

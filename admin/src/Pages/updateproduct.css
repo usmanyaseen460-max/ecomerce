@@ -52,12 +52,12 @@
   border-color: black;
 }
 
-/* Sizes wrapper */
+/* Sizes wrapper: ALWAYS row, do not change on smaller screens */
 .sizes-wrapper {
-  display: flex;
+  display: flex !important;  /* enforce row layout */
   gap: 10px;
   margin-top: 5px;
-  flex-wrap: wrap;
+  flex-wrap: wrap;  /* allow wrapping if needed */
 }
 
 .size-option {
@@ -75,7 +75,7 @@
 }
 
 .size-option.selected {
-  background-color: black; /* highlight */
+  background-color: black;
   color: white;
   border-color: #4caf50;
 }
@@ -100,7 +100,6 @@
 }
 
 .upload-btn:hover {
- 
   color: white;
 }
 
@@ -161,23 +160,28 @@
   background-color: #333;
 }
 
-/* Responsive */
+/* Responsive adjustments without changing size buttons */
 @media (max-width: 800px) {
   .updateproduct {
     width: auto;
     padding: 30px;
     margin: 20px;
   }
+
+  /* KEEP SIZE BUTTONS ROW even on mobile */
   .sizes-wrapper {
-    flex-direction: column;
+    flex-direction: row !important;
   }
+
   .image-item {
     flex-direction: column;
     align-items: flex-start;
   }
+
   .image-item img {
     margin-bottom: 8px;
   }
+
   .update-btn {
     width: 100%;
   }

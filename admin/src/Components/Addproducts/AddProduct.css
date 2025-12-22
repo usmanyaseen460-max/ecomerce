@@ -204,3 +204,54 @@
     gap: 20px;
   }
 }
+/* Sizes wrapper */
+.sizes-wrapper {
+  display: flex !important; /* force row layout */
+  gap: 10px;
+  margin-top: 5px;
+  flex-wrap: wrap; /* allow wrapping but keep row direction */
+}
+
+/* Size buttons */
+.size-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  user-select: none;
+}
+
+.size-option.selected {
+  background-color: black; /* highlight */
+  color: white;
+  border-color: #4caf50;
+}
+
+.size-option input {
+  cursor: pointer;
+}
+
+/* Responsive adjustments WITHOUT changing size buttons layout */
+@media (max-width: 800px) {
+  .addproduct {
+    width: auto;
+    padding: 30px;
+    margin: 20px;
+  }
+
+  .addproductprice {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* KEEP SIZE BUTTONS ROW even on mobile */
+  .sizes-wrapper {
+    flex-direction: row !important;
+  }
+}
