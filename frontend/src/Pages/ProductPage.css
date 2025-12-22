@@ -240,6 +240,17 @@
   font-size: 2rem;
   cursor: pointer;
 }
+.size-box {
+  display: inline-block;
+  border: 1px solid black; /* black border */
+  padding: 5px 10px;       /* thoda space andar */
+  margin-right: 8px;       /* spacing between sizes */
+  border-radius: 4px;      /* thoda rounded corners */
+  font-size: 14px;
+  font-weight: 500;
+  cursor: default;
+}
+
 /* Professional arrows - updated */
 .arrow {
   position: absolute;

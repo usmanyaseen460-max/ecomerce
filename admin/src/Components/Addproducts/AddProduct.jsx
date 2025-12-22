@@ -142,6 +142,7 @@ const colorsList = [
 
 const AddProduct = () => {
   const [title, setTitle] = useState("");
+  const [sizes, setSizes] = useState([]);
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [imageColorPairs, setImageColorPairs] = useState([]);
@@ -219,7 +220,10 @@ const AddProduct = () => {
     if (imagesWithoutColor.length > 0) {
       newErrors.images = "Please assign colors to all uploaded images";
     }
-
+ // ✅ SIZE VALIDATION (YAHI ADD HUA HAI)
+  if (sizes.length === 0) {
+    newErrors.sizes = "Select at least one size";
+  }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -234,6 +238,7 @@ const AddProduct = () => {
       name: title,
       price: price,
       description: description,
+       sizes,
       images: imageColorPairs.map((item) => ({
         url: item.url,
         publicId: item.publicId,
@@ -266,6 +271,8 @@ const AddProduct = () => {
       alert(`Error uploading product: ${error.message}`);
     }
   };
+
+
 
   return (
     <div className="addproduct">
@@ -307,6 +314,30 @@ const AddProduct = () => {
             {errors.price && <p className="error">{errors.price}</p>}
           </div>
         </div>
+                <p>Available Sizes</p>
+<div className="addproductitemfield">
+  <p>Select Sizes</p>
+  <div className="sizes-wrapper">
+    {["4 Meter", "4.5 Meter"].map((s) => (
+      <label key={s} className={`size-option ${sizes.includes(s) ? "selected" : ""}`}>
+        <input
+          type="checkbox"
+          value={s}
+          checked={sizes.includes(s)}
+          onChange={(e) => {
+            if (sizes.includes(s)) {
+              setSizes(sizes.filter((size) => size !== s));
+            } else {
+              setSizes([...sizes, s]);
+            }
+          }}
+        />
+        {s}
+      </label>
+    ))}
+  </div>
+  {errors.sizes && <p className="error">{errors.sizes}</p>}
+</div>
 
         {/* Cloudinary Image Upload */}
         <div className="addproductitemfield">

@@ -17,6 +17,36 @@
   border-radius: 6px;
   background: white;
 }
+/* Sizes wrapper */
+.sizes-wrapper {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+  flex-wrap: wrap;
+}
+
+.size-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  background-color: #f9f9f9;
+}
+
+.size-option.selected {
+  background-color: black; /* green highlight */
+  color: white;
+  border-color: #4caf50;
+}
+
+.size-option input {
+  cursor: pointer;
+}
 
 .addproductitemfield {
   width: 100%;

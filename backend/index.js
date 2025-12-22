@@ -48,6 +48,7 @@ const productSchema = new mongoose.Schema({
   name: String,
   description: String,
   price: Number,
+  sizes: [String],
   variants: [{ color: String, image: String }],
 });
 const Product = mongoose.model("Product", productSchema);
@@ -114,7 +115,7 @@ app.post("/addproduct", async (req, res) => {
     let products = await Product.find({});
     let id = products.length > 0 ? products[products.length - 1].id + 1 : 1;
 
-    const { name, price, description, images } = req.body;
+    const { name, price, description, images,sizes } = req.body;
 
     // Handle both old format (with files) and new format (with Cloudinary URLs)
     let variants = [];
@@ -133,7 +134,7 @@ app.post("/addproduct", async (req, res) => {
       });
     }
 
-    const product = new Product({ id, name, description, price, variants });
+    const product = new Product({ id, name, description, price, variants , sizes: Array.isArray(sizes) ? sizes : [],});
     await product.save();
 
     res.json({
@@ -160,7 +161,7 @@ app.post("/addproduct-legacy", upload.array("images"), async (req, res) => {
       image: file.path,
     }));
 
-    const product = new Product({ id, name, description, price, variants });
+    const product = new Product({ id, name, description, price, variants, sizes: sizeArr,  });
     await product.save();
 
     res.json({

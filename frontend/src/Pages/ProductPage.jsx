@@ -120,11 +120,19 @@ const ProductPage = () => {
             <h1 className="product-title">{product.name}</h1>
             <p className="product-price">Rs. {product.price}</p>
             
-            {/* Added Size information here */}
-           <div className="product-size">
-  <span className="size-label">Size:</span>
-  <span className="size-box">4   Meter</span>
-</div>
+       {product.sizes && product.sizes.length > 0 && (
+  <div className="product-size">
+    <span className="size-label">Size:</span>
+    <div className="size-options">
+      {product.sizes.map((size) => (
+        <span key={size} className="size-box">
+          {size}
+        </span>
+      ))}
+    </div>
+  </div>
+)}
+
 
 
             <p className="product-desc">{product.description}</p>
