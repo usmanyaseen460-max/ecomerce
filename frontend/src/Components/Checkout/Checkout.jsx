@@ -10,9 +10,7 @@ const CheckoutPage = () => {
     country: "Pakistan",
     province: "",
     city: "",
-    customCity: "",
     address: "",
-    apartment: "",
     postalCode: "",
     phone: "",
     saveInfo: false,
@@ -28,14 +26,14 @@ const CheckoutPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [buttonText, setButtonText] = useState("Complete Order");
 
-  const provinces = {
-    Punjab: ["Lahore", "Faisalabad", "Rawalpindi", "Multan", "Gujranwala", "Sialkot"],
-    Sindh: ["Karachi", "Hyderabad", "Sukkur", "Larkana"],
-    "Khyber Pakhtunkhwa": ["Peshawar", "Mardan", "Abbottabad"],
-    Balochistan: ["Quetta", "Gwadar", "Turbat"],
-    "Gilgit-Baltistan": ["Gilgit", "Skardu", "Hunza"],
-    "Azad Kashmir": ["Muzaffarabad", "Mirpur", "Rawalakot"],
-  };
+  const provinces = [
+    "Punjab",
+    "Sindh",
+    "Khyber Pakhtunkhwa",
+    "Balochistan",
+    "Gilgit-Baltistan",
+    "Azad Kashmir",
+  ];
 
   // Load product and form
   useEffect(() => {
@@ -60,9 +58,7 @@ const CheckoutPage = () => {
             country: "Pakistan",
             province: "",
             city: "",
-            customCity: "",
             address: "",
-            apartment: "",
             postalCode: "",
             phone: "",
             saveInfo: false,
@@ -81,41 +77,41 @@ const CheckoutPage = () => {
     }
   }, [orderPlaced]);
 
-  const handleChange = (e) => {
-    if (orderPlaced) return;
+ const handleChange = (e) => {
+  if (orderPlaced) return;
 
-    const { name, value, type, checked } = e.target;
-    let updatedForm = {
-      ...form,
-      [name]: type === "checkbox" ? checked : value,
-      productId: checkoutProduct?.id,
-    };
+  const { name, value, type, checked } = e.target;
 
-    if (name === "province") {
-      updatedForm.city = "";
-      updatedForm.customCity = "";
-      setErrors({ ...errors, province: "", city: "" });
-    }
-
-    if (name === "city" && value !== "Other") {
-      updatedForm.customCity = "";
-      setErrors({ ...errors, city: "" });
-    }
-
-    setForm(updatedForm);
-    localStorage.setItem("checkoutForm", JSON.stringify(updatedForm));
+  const updatedForm = {
+    ...form,
+    [name]: type === "checkbox" ? checked : value,
+    productId: checkoutProduct?.id,
   };
 
-  const validateForm = () => {
+  if (name === "province") {
+    updatedForm.city = "";
+    setErrors({ ...errors, province: "", city: "" });
+  }
+
+  if (name === "city") {
+    setErrors({ ...errors, city: "" });
+  }
+
+  setForm(updatedForm);
+  localStorage.setItem("checkoutForm", JSON.stringify(updatedForm));
+};
+
+
+    const validateForm = () => {
     const newErrors = {};
+
     if (!form.lastName.trim()) newErrors.lastName = "Last name is required";
     if (!form.province) newErrors.province = "Province is required";
-    if (!form.city) newErrors.city = "City is required";
-    if (form.city === "Other" && !form.customCity.trim())
-      newErrors.customCity = "Please enter your city name";
+    if (!form.city.trim()) newErrors.city = "City is required";
     if (!form.address.trim()) newErrors.address = "Address is required";
-    if (!form.phone.trim()) newErrors.phone = "Phone number is required";
-    else if (!/^03\d{9}$/.test(form.phone)) {
+    if (!form.phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (!/^03\d{9}$/.test(form.phone)) {
       newErrors.phone = "Phone must be 11 digits starting with 03";
     }
 
@@ -129,17 +125,15 @@ const CheckoutPage = () => {
     setIsSubmitting(true);
     setButtonText("Processing...");
 
-    const finalCity = form.city === "Other" ? form.customCity : form.city;
-
     const orderData = {
       name: `${form.firstName} ${form.lastName}`,
       phone: form.phone,
       province: form.province,
-      city: finalCity,
+      city: form.city,
       address: form.address,
       payment: form.payment,
       items: checkoutProduct
-        ? checkoutProduct.variants.map((v) => ({
+        ? checkoutProduct.variants.map(v => ({
             productId: checkoutProduct.id,
             productName: checkoutProduct.name,
             color: v.color,
@@ -162,41 +156,40 @@ const CheckoutPage = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(orderData),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("✅ Order saved:", data);
-
+      .then(res => res.json())
+      .then(() => {
         setTimeout(() => {
           setOrderPlaced(true);
           setButtonText("Order Placed ✓");
-          localStorage.removeItem("checkoutForm"); // clear form after order
+          localStorage.removeItem("checkoutForm");
           navigate("/orderconfirmation");
         }, 1000);
       })
-      .catch((err) => {
-        console.error("❌ Error saving order:", err);
+      .catch(() => {
         setIsSubmitting(false);
         setButtonText("Complete Order");
       });
   };
 
-  const isFormValid =
-    form.lastName &&
-    form.province &&
-    (form.city && (form.city !== "Other" || form.customCity)) &&
-    form.address &&
-    form.phone &&
-    /^03\d{9}$/.test(form.phone);
 
-  const productSubtotal = checkoutProduct
-    ? checkoutProduct.variants.reduce(
-        (sum, v) => sum + checkoutProduct.price * v.quantity,
-        0
-      )
-    : 0;
+const isFormValid =
+  form.lastName &&
+  form.province &&
+  form.city &&
+  form.address &&
+  form.phone &&
+  /^03\d{9}$/.test(form.phone);
 
-  const shipping = 200;
-  const total = productSubtotal + shipping;
+const productSubtotal = checkoutProduct
+  ? checkoutProduct.variants.reduce(
+      (sum, v) => sum + checkoutProduct.price * v.quantity,
+      0
+    )
+  : 0;
+
+const shipping = 200;
+const total = productSubtotal + shipping;
+
 
   return (
     <div className="checkout-container">
@@ -239,54 +232,35 @@ const CheckoutPage = () => {
             disabled={orderPlaced}
           />
           {errors.lastName && <span className="error-text">{errors.lastName}</span>}
-
-          <select
-            name="province"
-            value={form.province}
-            onChange={handleChange}
-            className={`input ${errors.province ? "input-error" : ""}`}
-            disabled={orderPlaced}
-          >
-            <option value="">Select Province *</option>
-            {Object.keys(provinces).map((province) => (
-              <option key={province} value={province}>
-                {province}
-              </option>
-            ))}
-          </select>
-          {errors.province && <span className="error-text">{errors.province}</span>}
-
-          <select
-            name="city"
-            value={form.city}
-            onChange={handleChange}
-            className={`input ${errors.city ? "input-error" : ""}`}
-            disabled={!form.province || orderPlaced}
-          >
-            <option value="">
-              {form.province ? "Select City *" : "First select province"}
-            </option>
-            {form.province &&
-              provinces[form.province].map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-            {form.province && <option value="Other">Other (Type your city)</option>}
-          </select>
-          {errors.city && <span className="error-text">{errors.city}</span>}
-
-          {form.city === "Other" && (
-            <input
-              type="text"
-              name="customCity"
-              value={form.customCity}
-              onChange={handleChange}
-              placeholder="Enter your city name *"
-              className={`input ${errors.customCity ? "input-error" : ""}`}
-              disabled={orderPlaced}
-            />
-          )}
+<select
+  name="province"
+  value={form.province}
+  onChange={handleChange}
+  className={`input ${errors.province ? "input-error" : ""}`}
+  disabled={orderPlaced}
+>
+  <option value="">Select Province *</option>
+  {provinces.map((province) => (
+    <option key={province} value={province}>
+      {province}
+    </option>
+  ))}
+</select>
+{errors.province && <span className="error-text">{errors.province}</span>}
+{form.province && (
+  <>
+    <input
+      type="text"
+      name="city"
+      value={form.city}
+      onChange={handleChange}
+      placeholder="Type your city *"
+      className={`input ${errors.city ? "input-error" : ""}`}
+      disabled={orderPlaced}
+    />
+    {errors.city && <span className="error-text">{errors.city}</span>}
+  </>
+)}
 
           <input
             type="text"
@@ -297,15 +271,7 @@ const CheckoutPage = () => {
             className={`input ${errors.address ? "input-error" : ""}`}
             disabled={orderPlaced}
           />
-          <input
-            type="text"
-            name="apartment"
-            value={form.apartment}
-            onChange={handleChange}
-            placeholder="Apartment (optional)"
-            className="input"
-            disabled={orderPlaced}
-          />
+         
           <input
             type="text"
             name="postalCode"
